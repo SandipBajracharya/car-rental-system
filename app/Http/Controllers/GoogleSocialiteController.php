@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
-use Socialite;
-use Auth;
+use Laravel\Socialite\Facades\Socialite;
 use Exception;
 use Carbon\Carbon;
 
@@ -45,24 +45,33 @@ class GoogleSocialiteController extends Controller
       
             if ($finduser) {
                 Auth::login($finduser);
-                return redirect('/home');
+                if (Auth::user()->role->role == 'super-admin') {
+                    return redirect('/admin/dashboard');
+                } else {
+                    return redirect('/customer/home');
+                }
             } else {
                 $role = $this->roleModel->findOneByRole('customer');
-                
+                $initials = substr($user->user['given_name'], 0, 1).substr($user->user['family_name'], 0, 1);
                 $newUser = User::create([
                     'first_name' => $user->user['given_name'],
                     'last_name' => $user->user['family_name'],
+                    'initials' => $initials,
                     'email' => $user->email,
                     'password' => Hash::make('my-google'),
                     'role_id' => $role->id,
                     'social_id'=> $user->id,
                     'social_type'=> 'google',
-                    'email_verified' => $user->user['email_verified'],
+                    'image' => $user->user['picture'],
                     'email_verified_at' => Carbon::now(),
                 ]);
-     
+
                 Auth::login($newUser);
-                return redirect('/home');
+                if (Auth::user()->role->role != 'super-admin') {
+                    return redirect('/customer/home');
+                } else {
+                    return redirect('/admin/dashboard');
+                }
             }
         } catch (Exception $e) {
             dd($e->getMessage());

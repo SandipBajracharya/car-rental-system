@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
@@ -21,11 +21,16 @@ class User extends Authenticatable
     protected $fillable = [
         'first_name',
         'last_name',
+        'initials',
+        'gender',
         'email',
         'password',
         'social_id',
         'social_type',
         'role_id',
+        'mobile_number',
+        'image',
+        'email_verified_at'
     ];
 
     /**
@@ -46,4 +51,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+
+    public function profile()
+    {
+        return $this->hasOne(AdditionalUserInfo::class, 'user_id');
+    }
 }

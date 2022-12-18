@@ -7,7 +7,7 @@
 @section('main-content')
     @php
         // dd($inputs);
-        $breadcrumb_arr = ['Home' => '/', 'Profile Setting' => '/c/profile-setting'];
+        $breadcrumb_arr = ['Home' => '/', 'Profile Setting' => '/profile-setting'];
     @endphp
     @include('include.main.innerHeader', ['breadcrumb_arr' => $breadcrumb_arr])
 
@@ -130,7 +130,7 @@
                             <div class="col-lg-4 col-md-5">
                                 <small>Document Type</small>
                                 <select class="form-control form-control-lg mb-32" name="document_type" id="document_type">
-                                    <option value="" {{!isset($user)? 'selected' :''}}>Select document type</option>
+                                    <option value="" {{!isset($user)? 'selected' : ''}}>Select document type</option>
                                     {{-- <option value="Citizenship" {{isset($user) && isset($user->profile->document_type) && $user->profile->document_type == 'Citizenship'? 'selected' : ''}}>Citizenship</option> --}}
                                     <option value="Driving license" {{isset($user) && isset($user->profile->document_type) && $user->profile->document_type == 'Driving license'? 'selected' : ''}}>Driving license</option>
                                     {{-- <option value="Voters card" {{isset($user) && isset($user->profile->document_type) && $user->profile->document_type == 'Voters card'? 'selected' : ''}}>Voters card</option> --}}

@@ -41,7 +41,7 @@ class ReservationController extends Controller
                 return view('pages.main.carCheckout', compact('is_guest'));
             } else {
                 Alert::toast('Please complete your profile first!', 'info');
-                return redirect('/c/profile-setting');
+                return redirect('/profile-setting');
             }
         } else {
             return redirect('/login');

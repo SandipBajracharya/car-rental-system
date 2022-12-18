@@ -41,6 +41,10 @@ Route::get('callback/facebook', [FacebookSocialiteController::class, 'handleCall
 Route::group(['middleware' => 'auth'], function() {
     Route::post('/store-additional-user-info', [AdditionalUserInfoController::class, 'storeAdditionalInfo'])->name('user.store-addn-info');
     Route::post('/store-additional-user-info', [AdditionalUserInfoController::class, 'storeAdditionalInfo'])->name('user.store-addn-info');
+
+    Route::get('/profile-setting', [AdditionalUserInfoController::class, 'showProfilePage'])->name('profileSetting');
+    Route::post('/update-user-profile', [AdditionalUserInfoController::class, 'updateUserProfile'])->name('userProfile.update');
+    Route::post('/password-change', [AdditionalUserInfoController::class, 'changePassword'])->name('password.change');
 });
 
 // Reservation

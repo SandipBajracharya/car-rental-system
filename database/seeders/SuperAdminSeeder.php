@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Services\RoleServices;
 
+use Carbon\Carbon;
+
 class SuperAdminSeeder extends Seeder
 {
     /**
@@ -20,11 +22,13 @@ class SuperAdminSeeder extends Seeder
         $roleModel = new RoleServices();
         $role = $roleModel->findOneByRole('super-admin');
         $user = [
-            'first_name' => 'admin',
-            'last_name' => 'admin',
-            'email' => 'sndp106.sb@gmail.com',
+            'first_name' => 'Admin',
+            'last_name' => 'Admin',
+            'initials' => 'AA',
+            'email' => 'sndp6.sb@gmail.com',
             'password' => Hash::make('admin@123'),
-            'role_id' => $role->id
+            'role_id' => $role->id,
+            'email_verified_at' => Carbon::now()
         ];
 
         User::create($user);

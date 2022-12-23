@@ -179,7 +179,7 @@
             </div>
             <div class="hero-car__content">
                 <h6 class="text-white heading--underline white">{{ isset($vehicle1)? $vehicle1->model : 'NA' }}</h6>
-                <a class="h6 text-white text-end" href="{{ isset($vehicle1)? '/car-detail/'.$vehicle1->slug : '#' }}">+ Rent</a>
+                <a class="h6 text-white text-end" href="{{ isset($vehicle1)? '/car-detail/'.$vehicle1->slug.'?rent=1' : '#' }}">+ Rent</a>
             </div>
         </div>
         <div class="hero-car hero-car--2">
@@ -192,7 +192,7 @@
             </div>
             <div class="hero-car__content">
                 <h6 class="text-white heading--underline white">{{ isset($vehicle2)? $vehicle2->model : 'NA' }}</h6>
-                <a class="h6 text-white text-end" href="{{ isset($vehicle2)? '/car-detail/'.$vehicle2->slug : '#' }}">+ Rent</a>
+                <a class="h6 text-white text-end" href="{{ isset($vehicle2)? '/car-detail/'.$vehicle2->slug.'?rent=1' : '#' }}">+ Rent</a>
             </div>
         </div>
     </section>

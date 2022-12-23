@@ -52,3 +52,6 @@ Route::get('/find-car', [ReservationController::class, 'findCar'])->name('find.c
 Route::get('/checkout', [ReservationController::class, 'checkout'])->name('checkout');
 Route::get('/checkout-as-guest', [ReservationController::class, 'checkoutAsGuest'])->name('checkout.guest');
 Route::post('/process-reservation', [ReservationController::class, 'processCarReservation'])->name('reserve.car');
+
+// Check availability
+Route::get('/check-vehicle-availability/{vehicle_id}', [ReservationController::class, 'checkVehicleAvailability'])->name('check.availability');

@@ -26,15 +26,19 @@ class MainController extends Controller
     public function carListing()
     {
         $vehicles = $this->vehicleService->findAllVehicles();
-        return view('pages.main.carListing', compact('vehicles'));
+        $inputs = session()->get('rental_info') ?? [];
+        return view('pages.main.carListing', compact('vehicles', 'inputs'));
     }
 
-    public function viewCarDetail($slug)
+    public function viewCarDetail(Request $request, $slug)
     {
+        if (isset($request->rent)) {
+            session()->forget('rental_info');
+        }
         $vehicle = $this->vehicleService->findVehicleBySlug($slug);
-        $rental_info = session()->get('rental_info');
+        $rental_info = session()->get('rental_info') ?? [];
         $show_filter = isset($rental_info) && count($rental_info) > 0? false : true;
-        return view('pages.main.carDetail', compact('vehicle', 'show_filter'));
+        return view('pages.main.carDetail', compact('vehicle', 'show_filter', 'rental_info'));
     }
 
     public function ajaxCarDetail(Request $request)

@@ -53,27 +53,38 @@
                         @endif
                     </div>
                     @if ($show_filter)                        
-                        <div class="row gap-24-row mb-24">
-                            <div class="col-md-6"><input class="form-control form-control-lg"
-                                    placeholder="Pick-up Location" /><small></small></div>
+                        <div class="row gap-24-row mb-24" id="availability-section">
                             <div class="col-md-6">
-                                <div class="form-icon trail"><input class="form-control form-control-lg"
-                                        placeholder="Pickup Date" /><i class="lg ic-calendar"></i></div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-icon trail"><input class="form-control form-control-lg"
-                                        placeholder="Pickup Time" /><i class="lg ic-clock-outline"></i></div>
+                                <label for="">Pickup Location:</label> <span class="text-danger">*</span>
+                                <input class="form-control form-control-lg" placeholder="Pick-up Location" name="pickup_location" id="ca_pl" value="{{ old('pickup_location') }}" />
+                                <span class="text-danger" id="pl_valn" style="display: none;"><small>Pickup location is required</small></span>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-icon trail"><input class="form-control form-control-lg"
-                                        placeholder="Drop-off Date" /><i class="lg ic-calendar"></i></div>
+                                <label for="">Start date:</label> <span class="text-danger">*</span>
+                                <div class="form-icon trail">
+                                    <input class="form-control form-control-lg" placeholder="Pickup-up Date &amp; Time" type="datetime-local" name="start_dt" id="ca_sd" value="{{ old('start_dt') }}" />
+                                    <i class="lg ic-calendar"></i>
+                                </div>
+                                <span class="text-danger" id="sd_valn" style="display: none;"><small>Start date is required</small></span>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-icon trail"><input class="form-control form-control-lg"
-                                        placeholder="Drop-off Time" /><i class="lg ic-clock-outline"></i></div>
+                                <label for="">End date:</label> <span class="text-danger">*</span>
+                                <div class="form-icon trail">
+                                    <input class="form-control form-control-lg" placeholder="Drop-off Date &amp; Time" type="datetime-local" name="end_dt" id="ca_ed" value="{{ old('end_dt') }}" />
+                                    <i class="lg ic-calendar"></i>
+                                </div>
+                                <span class="text-danger" id="ed_valn" style="display: none;"><small>End date is required</small></span>
                             </div>
-                            <div class="col-md-6"><button class="btn btn-primary btn-lg w-100">Check Availability</button>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <button class="btn btn-primary btn-lg w-100" onclick="checkVehicleAvailability({{$vehicle->id}})" id="ca_btn">Check Availability</button>
                             </div>
+                        </div>
+                        <div class="row gap-24-row mb-24 text-success flex-center ca_vf" id="car-available" style="display: none">
+                            This vehicle is available for booking.!
+                        </div>
+                        <div class="row gap-24-row mb-24 text-danger flex-center ca_vnf" id="car-available" style="display: none">
+                            Sorry! This vehicle is not available for time being. <br>
+                            Please try booking other vehicles.
                         </div>
                     @endif
                     <div class="border-top border-gray200 mt-24 pt-24 flex-end">
@@ -85,17 +96,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex-end border-top border-gray200 pt-24 mt-24">
-                    @if (auth()->check())
-                        <a class="btn btn-primary btn-lg" type="button" href="/checkout?vehicle_id={{$vehicle->id}}">
-                            <i class="ic-car mr-8"></i>BOOK NOW
-                        </a>
-                    @else
-                        <a class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#bookingAliasModal">
-                            <i class="ic-car mr-8"></i>BOOK NOW
-                        </a>
-                    @endif
-                </div>
+                @if ($show_filter)
+                    <div class="flex-end border-top border-gray200 pt-24 mt-24 ca_vf" style="display: none;">
+                        @if (auth()->check())
+                            <a class="btn btn-primary btn-lg" type="button" href="/checkout?vehicle_id={{$vehicle->id}}">
+                                <i class="ic-car mr-8"></i>BOOK NOW
+                            </a>
+                        @else
+                            <a class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#bookingAliasModal">
+                                <i class="ic-car mr-8"></i>BOOK NOW
+                            </a>
+                        @endif
+                    </div>
+                @else
+                    <div class="flex-end border-top border-gray200 pt-24 mt-24">
+                        @if (auth()->check())
+                            <a class="btn btn-primary btn-lg" type="button" href="/checkout?vehicle_id={{$vehicle->id}}">
+                                <i class="ic-car mr-8"></i>BOOK NOW
+                            </a>
+                        @else
+                            <a class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#bookingAliasModal">
+                                <i class="ic-car mr-8"></i>BOOK NOW
+                            </a>
+                        @endif
+                    </div>
+                @endif
             </div>
             <div class="row gx-md-48 gap-48-row">
                 <div class="col-xl-6">
@@ -114,6 +139,60 @@
         function checkoutAsGuest() {
             sessionStorage.setItem('is_guest', true);
             window.location.href = '/checkout';
+        }
+
+        function checkVehicleAvailability(vehicleId) {
+            let pick_location = $("#ca_pl").val();
+            let start_dt = $("#ca_sd").val();
+            let end_dt = $("#ca_ed").val();
+            let proceed = true;
+
+            if (!pick_location) {
+                $("#pl_valn").css("display", "block");
+                proceed = false;
+            }
+            if (!start_dt) {
+                $("#sd_valn").css("display", "block");
+                proceed = false;
+            }
+            if (!end_dt) {
+                $("#ed_valn").css("display", "block");
+                proceed = false;
+            }
+
+            console.log(proceed);
+            if (proceed) {
+                let ca_btn = $("#ca_btn");
+                ca_btn.html("Checking...");
+                ca_btn.attr("disabled", "disabled");
+                ca_btn.css("cursor", "not-allowed");
+
+                setTimeout(() => {
+                    $.ajax({
+                        type: "GET",
+                        url: `/check-vehicle-availability/${vehicleId}`,
+                        data: {
+                            pickup_location: pick_location,
+                            start_dt: start_dt,
+                            end_dt: end_dt
+                        },
+                        // dataType: 'JSON',
+                        success: function (resp) {
+                            $("#availability-section").css("display", "none");
+                            console.log("resp" + resp);
+                            if (resp) {
+                                $(".ca_vf").css("display", "flex");
+                            } else {
+                                $(".ca_vnf").css("display", "flex");
+                            }
+                        },
+                        error: function (resp) {
+                            console.log("error");
+                            console.log(resp);
+                        },
+                    });
+                }, 2000);
+            }
         }
     </script>
 @endsection

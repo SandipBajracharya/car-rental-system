@@ -82,10 +82,14 @@ class ReservationController extends Controller
         }
     }
 
-    public function bookCar()
+    public function checkVehicleAvailability(Request $request, $vehicle_id)
     {
-        // 1. check payment method or cash on site
-        // 2. store payment method if save my payment is clicked
-        // 3. book/reserve a car
+        $inputs = $request->all();
+        $inputs['pickup_location'] = $request->pickup_location;
+        $inputs['start_dt'] = date('Y-m-d H:i:s', strtotime(str_replace('T', ' ', $request->start_dt)));
+        $inputs['end_dt'] = date('Y-m-d H:i:s', strtotime(str_replace('T', ' ', $request->end_dt)));
+        session()->put('rental_info', $inputs);
+        $isAvailable = $this->reservationService->checkVehicleAvailability($inputs, $vehicle_id);
+        return $isAvailable;
     }
 }

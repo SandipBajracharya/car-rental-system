@@ -13,6 +13,28 @@ class ReservationServices
 {
     public function getAvailableCars($inputs)
     {
+        $vehicles = $this->reservationCheckLogic($inputs);
+
+        // get vehicles which are not reserved
+        return Vehicle::where('availability', 1)
+            ->whereNotIn('id', $vehicles)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+    }
+
+    public function checkVehicleAvailability($inputs, $vehicle_id)
+    {
+        $vehicles = $this->reservationCheckLogic($inputs);
+
+        if (!in_array($vehicle_id, $vehicles)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private function reservationCheckLogic($inputs)
+    {
         $reserved_vehicles = Reservation::query();
         if (isset($inputs['start_dt']) && isset($inputs['end_dt'])) {
             $start_date = $inputs['start_dt'];
@@ -58,11 +80,7 @@ class ReservationServices
             $vehicles = [];
         }
 
-        // get vehicles which are not reserved
-        return Vehicle::where('availability', 1)
-            ->whereNotIn('id', $vehicles)
-            ->orderBy('created_at', 'DESC')
-            ->get();
+        return $vehicles;
     }
 
     public function checkAdditionalUserInfo($userid)

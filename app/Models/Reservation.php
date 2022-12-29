@@ -24,4 +24,19 @@ class Reservation extends Model
         'payment_id',
         'is_guest'
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function vehicles()
+    {
+        return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
+    }
+
+    public function guest()
+    {
+        return $this->hasOne(GuestInfo::class, 'reservation_id');
+    }
 }

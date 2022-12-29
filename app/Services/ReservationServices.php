@@ -8,9 +8,19 @@ use App\Models\AdditionalUserInfo;
 use App\Models\GuestInfo;
 use App\Services\VehicleServices;
 use Auth;
+use DataTables;
 
 class ReservationServices
 {
+    public function findReservationById($id, $select = [])
+    {
+        $reservation = Reservation::where('id', $id);
+        if (count($select) > 0) {
+            $reservation = $reservation->select($select);
+        }
+        return $reservation->first();
+    }
+
     public function getAvailableCars($inputs)
     {
         $vehicles = $this->reservationCheckLogic($inputs);
@@ -182,5 +192,164 @@ class ReservationServices
         } catch (\Throwable $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
+    }
+
+    public function getActiveDataTable()
+    {
+        $data = Reservation::where('status', 'Active')->orderBy('created_at', 'DESC')->get();
+        $datatable = $this->reservationDatatable($data);
+        return $datatable->addColumn('action', function($row) {
+                $btn = '<div class="gap-8">
+                        <button class="btn btn-ghost-gray btn-sm show_btn"
+                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasReservationDetail"
+                            aria-controls="offcanvasReservationDetail" data-reservation_id="'.$row->id.'">
+                            <i class="ic-show"></i>
+                        </button>
+                        <button class="btn btn-ghost-gray btn-sm edit_btn" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasReservationEdit"
+                            aria-controls="offcanvasReservationEdit" data-reservation_id="'.$row->id.'">
+                            <i class="ic-edit"></i>
+                        </button>
+                    </div>';
+                return $btn;
+            })
+            ->rawColumns(['action', 'amount'])
+            ->make(true);
+    }
+
+    public function getCompletedDataTable()
+    {
+        $data = Reservation::where('status', 'Completed')->orderBy('created_at', 'DESC')->get();
+        $datatable = $this->reservationDatatable($data);
+        return $datatable->addColumn('action', function($row) {
+                $btn = '<div class="gap-8">
+                        <button class="btn btn-ghost-gray btn-sm show_btn"
+                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasReservationDetail"
+                            aria-controls="offcanvasReservationDetail" data-reservation_id="'.$row->id.'">
+                            <i class="ic-show"></i>
+                        </button>
+                    </div>';
+                return $btn;
+            })
+            ->rawColumns(['action', 'amount'])
+            ->make(true);
+    }
+
+    public function getCancelledDataTable($pending)
+    {
+        if ($pending) {
+            $data = Reservation::where('status', 'Canceled')->where('has_refunded', 0)->orderBy('created_at', 'DESC')->get();
+        } else {
+            $data = Reservation::where('status', 'Canceled')->where('has_refunded', 1)->orderBy('created_at', 'DESC')->get();
+        }
+        $datatable = $this->reservationDatatable($data);
+        return $datatable->addColumn('action', function($row) {
+                $btn = '<div class="gap-8">
+                        <button class="btn btn-ghost-gray btn-sm show_btn"
+                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasReservationDetail"
+                            aria-controls="offcanvasReservationDetail" data-reservation_id="'.$row->id.'">
+                            <i class="ic-show"></i>
+                        </button>
+                    </div>';
+                return $btn;
+            })
+            ->rawColumns(['action', 'amount'])
+            ->make(true);
+    }
+
+    public function formatModalData($row)
+    {
+        return [
+            'initials' => !$row->is_guest? (isset($row->users)? ($row->users->initials) : 'C') : 'G',
+            'client' => !$row->is_guest? (isset($row->users)? ($row->users->first_name .' '.$row->users->last_name) : null) : (isset($row->guest)? $row->guest->full_name : '-'),
+            'phone_number' => !$row->is_guest? (isset($row->users)? $row->users->mobile_number : null) : (isset($row->guest)? $row->guest->mobile_number : null),
+            'reservation_period' => date('H:i A jS M Y', strtotime($row->start_dt)) .' - '. date('H:i A jS M Y', strtotime($row->end_dt)),
+            'vehicle_id' => $row->vehicle_id,
+            'vehicle' => isset($row->vehicles)? $row->vehicles->model : null,
+            'document_number' => !$row->is_guest? (isset($row->users)? $row->users->profile->document_number : null) : (isset($row->guest)? $row->guest->document_number : '-'),
+            'payment_mode' => 'NA',
+            'amount' => $row->amount,
+            'email' => !$row->is_guest? (isset($row->users)? $row->users->email : null) : (isset($row->guest)? $row->guest->email : '-'),
+            'pickup_location' => $row->pickup_location,
+            'start_dt' => date('Y-m-d H:i:s', strtotime($row->start_dt)),
+            'end_dt' => date('Y-m-d H:i:s', strtotime($row->end_dt))
+        ];
+    }
+
+    public function formatModalShowData($data)
+    {
+        $inputs['pickup_location'] = $data['pickup_location'];
+        $inputs['start_dt'] = $data['start_dt'];
+        $inputs['end_dt'] = $data['end_dt'];
+        $data['vehicles'] = $this->getAvailableCars($inputs);
+        return $data;
+    }
+
+    public function updateReservation($request, $id)
+    {
+        $payload = [
+            'vehicle_id' => $request->vehicle_id,
+            'status' => $request->status
+        ];
+
+        try {
+            Reservation::whereId($id)->update($payload);
+            $res = ['status' => 'success', 'message' => 'Reservation updated successfully'];
+        } catch (\Throwable $e) {
+            $res = ['status' => 'error', 'message' => $e->getMessage()];
+        }
+        return $res;
+    }
+
+    public function reservationDatatable($data)
+    {
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('client', function($row) {
+                if (!empty($row->user_id)) {
+                    return isset($row->users)? ($row->users->first_name .' '.$row->users->last_name) : null;
+                } else {
+                    if ($row->is_guest) {
+                        return isset($row->guest)? $row->guest->full_name : null;
+                    } else {
+                        return null;
+                    }
+                }
+            })
+            ->addColumn('phone_number', function($row) {
+                if (!empty($row->user_id)) {
+                    return isset($row->users)? $row->users->mobile_number : null;
+                } else {
+                    if ($row->is_guest) {
+                        return isset($row->guest)? $row->guest->mobile_number : null;
+                    } else {
+                        return null;
+                    }
+                }
+            })
+            ->addColumn('vehicle', function($row) {
+                return isset($row->vehicles)? $row->vehicles->model : null;
+            })
+            ->addColumn('reservation_period', function($row) {
+                return (date('H:i A jS M Y', strtotime($row->start_dt)) .' - '. date('H:i A jS M Y', strtotime($row->end_dt)));
+            })
+            ->addColumn('amount', function($row) {
+                $amt = '<span class="fw-semibold text-success">$'.$row->amount.'</span>';
+                return $amt;
+            })
+            ->addColumn('refund_type', function($row) {
+                return "NA";
+            });
+    }
+
+    public function markCancelledReservationAsRefunded($id)
+    {
+        try {
+            Reservation::whereId($id)->update(['has_refunded' => 1]);
+            $res = ['status' => 'success', 'message' => 'Marked as refunded.'];
+        } catch (\Throwable $e) {
+            $res = ['status' => 'error', 'message' => $e->getMessage()];
+        }
+        return $res;
     }
 }

@@ -26,4 +26,9 @@ class GuestInfo extends Model
         'document_expire',
         'notes',
     ];
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class, 'reservation_id', 'id');
+    }
 }

@@ -25,4 +25,9 @@ class Vehicle extends Model
         'created_by',
         'updated_by'
     ];
+
+    public function reservations()
+    {
+        return $this->belongsTo(Reservation::class, 'vehicle_id');
+    }
 }

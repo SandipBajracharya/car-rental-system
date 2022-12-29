@@ -13,9 +13,9 @@
                     </a>
                     <div class="collapse bg-primary900" id="subMenu-02">
                         <div class="gap-8-vertical px-16 pb-16">
-                            <a class="sidebar__link" href="ActiveReservation.html">Active</a>
-                            <a class="sidebar__link" href="CancelledReservation.html">Cancelled</a>
-                            <a class="sidebar__link" href="CompletedReservation.html">Completed</a>
+                            <a class="sidebar__link" href="/admin/active-reservations">Active</a>
+                            <a class="sidebar__link" href="/admin/cancelled-reservations">Cancelled</a>
+                            <a class="sidebar__link" href="/admin/completed-reservations">Completed</a>
                         </div>
                     </div>
                 </li>

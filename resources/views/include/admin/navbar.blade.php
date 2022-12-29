@@ -3,7 +3,7 @@
         <h6 class="d-none d-sm-block">Welcome to Everest Rental Dashboard</h6>
     </div>
     <div class="align-center gap-8">
-        <div class="dropdown dropdown-notification mr-8"><a class="new" id="dropdownMenua" role="button"
+        {{-- <div class="dropdown dropdown-notification mr-8"><a class="new" id="dropdownMenua" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false"><i class="ic-bell text-cGray500 h4"></i></a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenua">
                 <li>
@@ -71,7 +71,7 @@
                         </div>
                     </a></li>
             </ul>
-        </div>
+        </div> --}}
         @if (!empty(auth()->user()->social_id))
             <img class="avatar-initial-lg" src="{{auth()->user()->image}}" alt="profile pic">
         @else
@@ -85,8 +85,8 @@
                 data-bs-toggle="dropdown" aria-expanded="false">{{auth()->user()->first_name . ' '. auth()->user()->last_name}}<i
                     class="ic-chevron-down ml-2"></i></a>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                <li><a class="dropdown-item" href="#">My Profile</a></li>
-                <li><a class="dropdown-item" href="#">Change Password</a></li>
+                <li><a class="dropdown-item" href="/profile-setting">My Profile</a></li>
+                {{-- <li><a class="dropdown-item" href="#">Change Password</a></li> --}}
                 <li>
                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">

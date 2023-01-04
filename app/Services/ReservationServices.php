@@ -9,6 +9,7 @@ use App\Models\GuestInfo;
 use App\Services\VehicleServices;
 use Auth;
 use DataTables;
+use Carbon\Carbon;
 
 class ReservationServices
 {
@@ -351,5 +352,24 @@ class ReservationServices
             $res = ['status' => 'error', 'message' => $e->getMessage()];
         }
         return $res;
+    }
+
+    public function autoUpdateReservations($id)
+    {
+        try {
+            $reservation = Reservation::find($id);
+            if (!$reservation->is_reserved) {
+                $reservation->is_reserved = 1;
+                $reservation->cron_last_execution = Carbon::now();
+            } else {
+                $reservation->is_reserved = 0;
+                $reservation->status = 'Completed';
+                $reservation->cron_last_execution = Carbon::now();
+            }
+            $reservation->save();
+            return ['status' => 'success', 'message' => 'success'];
+        } catch (\Throwable $e) {
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
     }
 }

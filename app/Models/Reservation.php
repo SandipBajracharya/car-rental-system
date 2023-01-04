@@ -22,7 +22,12 @@ class Reservation extends Model
         'drop-off_location',
         'payment_mode',
         'payment_id',
-        'is_guest'
+        'is_guest',
+        'note',
+        'has_refunded',
+        'start_cron',
+        'end_cron',
+        'cron_last_execution'
     ];
 
     public function users()

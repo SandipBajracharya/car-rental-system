@@ -22,10 +22,11 @@
             <label class="form-label">Features</label>
             <textarea class="form-control @error('features') is-invalid @enderror" placeholder="Vehicle features" name="features" id="{{$operation}}-vehicle_features" oninput="onFieldInput(event)" >{{old('features')}}</textarea>
             @error('features')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
             @enderror
+            <div class="mt-4"><small><strong class="text-danger">Note: </strong> Separate features with comma. Example: Comfortable, AC</small></div>
         </div>
         <div class="col-6">
             <label class="form-label">Model</label>

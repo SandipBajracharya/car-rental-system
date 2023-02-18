@@ -31,4 +31,9 @@ class GuestInfo extends Model
     {
         return $this->belongsTo(Reservation::class, 'reservation_id', 'id');
     }
+
+    public function reservationLog()
+    {
+        return $this->hasMany(ReservationActivityLog::class, 'guest_id');
+    }
 }

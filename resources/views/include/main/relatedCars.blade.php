@@ -2,7 +2,7 @@
     $vehicles = getRelatedCars($id);
 @endphp
 <div class="flex-center-between border-bottom border-gray200 pb-16 mb-32">
-    <h3 class="text-primary">Relates Cars</h3><a href="/car-listing">View All</a>
+    <h3 class="text-primary">Related Cars</h3><a href="/car-listing">View All</a>
 </div>
 @foreach ($vehicles as $vehicle)
     @php
@@ -26,7 +26,7 @@
                 @endif
             </div>
             <div class="flex-center-between border-top border-cGray300 mt-16 pt-16"><a
-                    href="/car-detail/{{$vehicle->slug}}">Details</a>
+                    href="/car-detail/{{$vehicle->slug}}?rent=1">Details</a>
                 <p>Starting at <span class="fw-semibold text-danger">${{$vehicle->pricing}}</span> / <small
                         class="d-inline">day</small></p>
             </div>

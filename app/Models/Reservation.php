@@ -44,4 +44,9 @@ class Reservation extends Model
     {
         return $this->hasOne(GuestInfo::class, 'reservation_id');
     }
+
+    public function reservationLog()
+    {
+        return $this->hasMany(ReservationActivityLog::class, 'reservation_id');
+    }
 }

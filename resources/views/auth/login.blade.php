@@ -40,7 +40,7 @@
                                             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }} />
                                             <label class="form-check-label" for="checkRemember">Remember me</label>
                                         </div>
-                                        <a class="p" href="ForgotPassword.html">Forgot Password?</a>
+                                        <a class="p" href="/password/reset">Forgot Password?</a>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-lg w-100 mb-24">Login</button>
                                 </form>

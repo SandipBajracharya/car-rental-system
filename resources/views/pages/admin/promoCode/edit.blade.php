@@ -1,4 +1,4 @@
-<div class="offcanvas offcanvas-end offcanvas-01" id="offcanvasPromoEdit" tabindex="-1" aria-labelledby="offcanvasPromoEditLabel">
+<div class="offcanvas offcanvas-end offcanvas-01" data-bs-backdrop="static" id="offcanvasPromoEdit" tabindex="-1" aria-labelledby="offcanvasPromoEditLabel">
     <div class="offcanvas-header">
         <h5 class="text-dark" id="offcanvasPromoEditLabel">Edit Promo Code</h5>
         <button class="btn btn-red btn-sm" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onclick="formModalClose()">

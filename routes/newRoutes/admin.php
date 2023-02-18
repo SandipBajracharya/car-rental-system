@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\VehicleController as VehicleController;
 use App\Http\Controllers\Admin\PromoCodeController as PromoCodeController;
 use App\Http\Controllers\Admin\HomePageController as HomePageController;
 use App\Http\Controllers\Admin\ReservationController as ReservationController;
+use App\Http\Controllers\Admin\ReservationActivityLogController as ReservationActivityLogController;
 
 Route::group(['middleware' => ['admin-auth', 'verified'], 'prefix' => 'admin'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
@@ -29,4 +30,8 @@ Route::group(['middleware' => ['admin-auth', 'verified'], 'prefix' => 'admin'], 
     Route::get('/reservation/{id}/edit', [ReservationController::class, 'edit'])->name('reservation.edit');
     Route::put('/reservation/{id}', [ReservationController::class, 'update'])->name('reservation.update');
     Route::get('/reservation/mark-as-refunded/{id}', [ReservationController::class, 'markCancelledAsRefunded'])->name('reservation.refunded');
+
+    //Reservation Log/notification
+    Route::get('/reservation-notifications', [ReservationActivityLogController::class, 'index'])->name('reservation-log.index');
+    Route::get('/reservation-notification/show/{id}', [ReservationActivityLogController::class, 'show'])->name('reservation-log.show');
 });

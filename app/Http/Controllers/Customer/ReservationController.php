@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GuestInfoRequest;
 use App\Http\Requests\VehicleSearchRequest;
 use App\Services\ReservationServices;
+Use App\Helpers\EmailHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -66,6 +67,11 @@ class ReservationController extends Controller
 
             if (Auth::check()) {
                 $resp = $this->reservationService->storeReservation($vehicle_id, $reserve_info);
+
+                // send email to client
+                $email_data = ['email' => auth()->user()->email, 'name' => auth()->user()->first_name.' '.auth()->user()->last_name, 'process' => 'active', 'order'=> $resp['data']];
+                EmailHelper::emailSend($email_data);
+
                 Alert::toast($resp['message'], $resp['status']);
                 return redirect()->back();
             } else {

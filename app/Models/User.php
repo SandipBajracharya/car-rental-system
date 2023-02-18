@@ -66,4 +66,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Reservation::class, 'user_id');
     }
+
+    public function reservationLog()
+    {
+        return $this->hasMany(ReservationActivityLog::class, 'user_id');
+    }
 }

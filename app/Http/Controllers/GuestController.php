@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\GuestInfoRequest;
+Use App\Helpers\EmailHelper;
 use App\Services\ReservationServices;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -28,6 +29,11 @@ class GuestController extends Controller
                 $resp = $this->reservationService->storeReservation($vehicle_id, $reserve_info);
                 if (isset($resp) && $resp['status'] == 'success') {
                     $result = $this->reservationService->storeGuestInfo($request, $resp['data']);
+
+                    // send email to client
+                    $email_data = ['email' => $request->email, 'name' => $request->full_name, 'process' => 'active', 'order'=> $resp['data']];
+                    EmailHelper::emailSend($email_data);
+
                     Alert::toast($resp['message'], $resp['status']);
                     $redirect_path = 'find-car?pickup_location='.$reserve_info['pickup_location'].'&start_dt='.$reserve_info['start_dt'].'&end_dt='.$reserve_info['end_dt'];
                     return redirect($redirect_path);

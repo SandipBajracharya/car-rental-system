@@ -134,20 +134,20 @@
                         <div class="col-md-6">
                             <label class="text-white form-label" for="">Pick-up Location</label>
                             <div class="form-icon trail">
-                                <input class="form-control form-control-lg form-transparent" placeholder="Pick-up Location" name="pickup_location" />
+                                <input class="form-control form-control-lg form-transparent" placeholder="Pick-up Location" name="pickup_location" value="{{old('pickup_location')}}"/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="text-white form-label" for="">Pick-up Date & Time</label>
                             <div class="form-icon trail">
-                                <input class="form-control form-control-lg form-transparent" placeholder="Pickup-up Date &amp; Time" name="start_dt" type="datetime-local" />
+                                <input class="form-control form-control-lg form-transparent" placeholder="Pickup-up Date &amp; Time" name="start_dt" type="datetime-local" value="{{old('start_dt')}}" />
                                 <i class="lg ic-calendar"></i>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="text-white form-label" for="">Drop-off Date & Time</label>
                             <div class="form-icon trail">
-                                <input class="form-control form-control-lg form-transparent" placeholder="Drop-off Date &amp; Time" name="end_dt"  type="datetime-local" />
+                                <input class="form-control form-control-lg form-transparent" placeholder="Drop-off Date &amp; Time" name="end_dt"  type="datetime-local" value="{{old('end_dt')}}" />
                                 <i class="lg ic-calendar"></i>
                             </div>
                         </div>

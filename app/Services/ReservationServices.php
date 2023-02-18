@@ -2,17 +2,29 @@
 
 namespace App\Services;
 
+Use App\Helpers\EmailHelper;
 use App\Models\Reservation;
 use App\Models\Vehicle;
 use App\Models\AdditionalUserInfo;
 use App\Models\GuestInfo;
 use App\Services\VehicleServices;
+use App\Services\ReservationActivityLogServices;
+use Illuminate\Database\Eloquent\Model;
+
 use Auth;
 use DataTables;
 use Carbon\Carbon;
 
-class ReservationServices
+class ReservationServices extends Model
 {
+    private $vehicleService, $reservationLogService;
+
+    public function __construct(VehicleServices $vehicle, ReservationActivityLogServices $reservation)
+    {
+        $this->vehicleService = $vehicle;
+        $this->reservationLogService = $reservation;
+    }
+
     public function findReservationById($id, $select = [])
     {
         $reservation = Reservation::where('id', $id);
@@ -102,8 +114,7 @@ class ReservationServices
     public function getAmount($vehicle_id, $reserve_info)
     {
         // get vehicle
-        $vehicleService = new VehicleServices();
-        $vehicle_pricing = $vehicleService->findVehicleById($vehicle_id, ['pricing']);
+        $vehicle_pricing = $this->vehicleService->findVehicleById($vehicle_id, ['pricing']);
 
         // calculate amount
         $date1 = date_create($reserve_info['start_dt']);
@@ -128,11 +139,17 @@ class ReservationServices
         // get amount
         $amount = $this->getAmount($vehicle_id, $reserve_info);
 
+        // cron for schedular
+        $start_cron = $this->generateCronExpression($reserve_info['start_dt']);
+        $end_cron = $this->generateCronExpression($reserve_info['end_dt']);
+
         try {
             $payload = [
                 'vehicle_id' => $vehicle_id,
                 'start_dt' => $reserve_info['start_dt'],
                 'end_dt' => $reserve_info['end_dt'],
+                'start_cron' => $start_cron,
+                'end_cron' => $end_cron,
                 'pickup_location' => $reserve_info['pickup_location'],
                 'reservation_code' => $code,
                 'is_reserved' => $is_reserved,
@@ -141,10 +158,12 @@ class ReservationServices
     
             if (Auth::check()) {
                 $payload['user_id'] = auth()->user()->id;
+                $desp = 'Reservation has been made.';
             } else {
                 $payload['is_guest'] = 1;
             }
             $reservation_info = Reservation::create($payload);
+            Auth::check()? $this->reservationLogService->updateLog('create', $desp, 'manual', $reservation_info->id) : false;           // reservation log update
             return ['status' => 'success', 'message' => 'Reservation done', 'data' => $reservation_info];
         } catch (\Throwable $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -188,7 +207,9 @@ class ReservationServices
         ];
 
         try {
-            GuestInfo::create($payload);
+            $guest = GuestInfo::create($payload);
+            $desp = 'Reservation has been made.';
+            $this->reservationLogService->updateLog('create', $desp, 'manual', $data->id, $guest->id);
             return ['status' => 'success', 'message' => 'Reservation is complete.'];
         } catch (\Throwable $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
@@ -294,6 +315,20 @@ class ReservationServices
         ];
 
         try {
+            $reservation = Reservation::find($id);
+            if ($reservation->status != $request->status) {
+                $desp = 'Reservation status has been updated to '.$request->status;
+                $guest = GuestInfo::where('reservation_id', $id)->first();
+                if (!empty($guest)) {
+                    $operator = $guest->id;
+                    $email_data = ['email' => $guest->email, 'name' => $guest->full_name, 'process' => $request->status, 'order'=> $reservation];
+                } else {
+                    $operator = null;
+                    $email_data = ['email' => $reservation->users->email, 'name' => $reservation->users->full_name.' '.$reservation->users->last_name, 'process' => $request->status, 'order'=> $reservation];
+                }
+                EmailHelper::emailSend($email_data);
+                $this->reservationLogService->updateLog('update', $desp, 'manual', $id, $operator);
+            }
             Reservation::whereId($id)->update($payload);
             $res = ['status' => 'success', 'message' => 'Reservation updated successfully'];
         } catch (\Throwable $e) {
@@ -358,18 +393,34 @@ class ReservationServices
     {
         try {
             $reservation = Reservation::find($id);
+            $operator = null;
+
             if (!$reservation->is_reserved) {
+                $desp = 'Vehicle is in reserved state.';
                 $reservation->is_reserved = 1;
                 $reservation->cron_last_execution = Carbon::now();
             } else {
+                $desp = 'Vehicle available for reservation.';
                 $reservation->is_reserved = 0;
                 $reservation->status = 'Completed';
                 $reservation->cron_last_execution = Carbon::now();
+
+                // send mail
+                $email_data = ['email' => $reservation->users->email, 'name' => $reservation->users->full_name.' '.$reservation->users->last_name, 'process' => 'Completed', 'order'=> $reservation];
+                EmailHelper::emailSend($email_data);
             }
             $reservation->save();
+            $this->reservationLogService->updateLog('update', $desp, 'auto', $id, $operator);
+
             return ['status' => 'success', 'message' => 'success'];
         } catch (\Throwable $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
+    }
+
+    public function generateCronExpression($date)
+    {
+        $cron = date('i H d m *', strtotime($date));
+        return $cron;
     }
 }

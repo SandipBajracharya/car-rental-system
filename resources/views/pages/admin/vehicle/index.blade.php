@@ -44,7 +44,7 @@
     <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js"></script>
 
-    <script>
+    {{-- <script>
         ClassicEditor
             .create( document.querySelector( '#c-vehicle_features' ) )
             .then( editor => {
@@ -62,7 +62,7 @@
             .catch( error => {
                 console.error( error );
             } );
-    </script>
+    </script> --}}
 
     @if (count($errors) > 0)
         <script>

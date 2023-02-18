@@ -36,16 +36,19 @@ class MainController extends Controller
             session()->forget('rental_info');
         }
         $vehicle = $this->vehicleService->findVehicleBySlug($slug);
+        empty($vehicle->features)? $features = [] : $features = explode(',', $vehicle->features);
         $rental_info = session()->get('rental_info') ?? [];
         $show_filter = isset($rental_info) && count($rental_info) > 0? false : true;
-        return view('pages.main.carDetail', compact('vehicle', 'show_filter', 'rental_info'));
+        return view('pages.main.carDetail', compact('vehicle', 'show_filter', 'rental_info', 'features'));
     }
 
     public function ajaxCarDetail(Request $request)
     {
         $id = $request->id;
         $vehicle = $this->vehicleService->findVehicleById($id);
-        $carDetail = view('include.main.carDetailModal', ['vehicle' => $vehicle])->render();
+        $rental_info = session()->get('rental_info') ?? [];
+        $show_filter = isset($rental_info) && count($rental_info) > 0? false : true;
+        $carDetail = view('include.main.carDetailModal', ['vehicle' => $vehicle, 'show_filter' => $show_filter, 'rental_info' => $rental_info])->render();
         return compact('carDetail');
     }
 }

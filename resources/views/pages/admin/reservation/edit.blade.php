@@ -1,4 +1,4 @@
-<div class="offcanvas offcanvas-end offcanvas-01" id="offcanvasReservationEdit" tabindex="-1" aria-labelledby="offcanvasReservationEditLabel">
+<div class="offcanvas offcanvas-end offcanvas-01" data-bs-backdrop="static" id="offcanvasReservationEdit" tabindex="-1" aria-labelledby="offcanvasReservationEditLabel">
     <form action="" method="POST" id="reservation-edit-form">
         @csrf
         @method('PUT')

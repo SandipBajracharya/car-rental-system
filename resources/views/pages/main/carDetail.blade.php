@@ -42,10 +42,13 @@
                     <p class="mb-16">{{$vehicle->description}}</p>
                     <h3 class="border-top border-gray200 pt-24 text-primary mb-24">Features</h3>
                     <div class="row gap-24-row mb-24">
-                        @if (isset($vehicle->features))
-                            <div class="col-sm-6 align-center">
-                                <h6 class="text-cGray600">{!! $vehicle->features !!}</h6>
-                            </div>    
+                        @if (count($features) > 0)
+                            @foreach ($features as $feature)
+                                <div class="col-sm-6 align-center">
+                                    <i class="ic-double-check h4 mr-8 text-success"></i>
+                                    <h6 class="text-cGray600">{{trim($feature)}}</h6>
+                                </div>
+                            @endforeach    
                         @else
                             <div class="col-sm-6 align-center">
                                 <h6 class="text-cGray600">NA</h6>
@@ -82,7 +85,7 @@
                         <div class="row gap-24-row mb-24 text-success flex-center ca_vf" id="car-available" style="display: none">
                             This vehicle is available for booking.!
                         </div>
-                        <div class="row gap-24-row mb-24 text-danger flex-center ca_vnf" id="car-available" style="display: none">
+                        <div class="row gap-24-row mb-24 text-danger flex-center ca_vnf" id="car-unavailable" style="display: none">
                             Sorry! This vehicle is not available for time being. <br>
                             Please try booking other vehicles.
                         </div>
@@ -135,64 +138,11 @@
 @endsection
 
 @section('page-specific-script')
+    <script src="/js/carModal.js" type="text/javascript"></script>
     <script>
         function checkoutAsGuest() {
             sessionStorage.setItem('is_guest', true);
             window.location.href = '/checkout';
-        }
-
-        function checkVehicleAvailability(vehicleId) {
-            let pick_location = $("#ca_pl").val();
-            let start_dt = $("#ca_sd").val();
-            let end_dt = $("#ca_ed").val();
-            let proceed = true;
-
-            if (!pick_location) {
-                $("#pl_valn").css("display", "block");
-                proceed = false;
-            }
-            if (!start_dt) {
-                $("#sd_valn").css("display", "block");
-                proceed = false;
-            }
-            if (!end_dt) {
-                $("#ed_valn").css("display", "block");
-                proceed = false;
-            }
-
-            console.log(proceed);
-            if (proceed) {
-                let ca_btn = $("#ca_btn");
-                ca_btn.html("Checking...");
-                ca_btn.attr("disabled", "disabled");
-                ca_btn.css("cursor", "not-allowed");
-
-                setTimeout(() => {
-                    $.ajax({
-                        type: "GET",
-                        url: `/check-vehicle-availability/${vehicleId}`,
-                        data: {
-                            pickup_location: pick_location,
-                            start_dt: start_dt,
-                            end_dt: end_dt
-                        },
-                        // dataType: 'JSON',
-                        success: function (resp) {
-                            $("#availability-section").css("display", "none");
-                            console.log("resp" + resp);
-                            if (resp) {
-                                $(".ca_vf").css("display", "flex");
-                            } else {
-                                $(".ca_vnf").css("display", "flex");
-                            }
-                        },
-                        error: function (resp) {
-                            console.log("error");
-                            console.log(resp);
-                        },
-                    });
-                }, 2000);
-            }
         }
     </script>
 @endsection

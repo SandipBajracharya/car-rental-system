@@ -1,4 +1,4 @@
-<div class="offcanvas offcanvas-end offcanvas-01" id="offcanvasHomeSliderAdd" tabindex="-1" aria-labelledby="offcanvasHomeSliderAddLabel">
+<div class="offcanvas offcanvas-end offcanvas-01" data-bs-backdrop="static" id="offcanvasHomeSliderAdd" tabindex="-1" aria-labelledby="offcanvasHomeSliderAddLabel">
     <div class="offcanvas-header">
         <h5 class="text-dark" id="offcanvasHomeSliderAddLabel">Add New Hero Slide</h5>
         <button class="btn btn-red btn-sm" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onclick="formModalClose()">

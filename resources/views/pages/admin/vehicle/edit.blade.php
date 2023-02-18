@@ -1,4 +1,4 @@
-<div class="offcanvas offcanvas-end offcanvas-01" id="offcanvasVehicleEdit" tabindex="-1" aria-labelledby="offcanvasVehicleEditLabel">
+<div class="offcanvas offcanvas-end offcanvas-01" data-bs-backdrop="static" id="offcanvasVehicleEdit" tabindex="-1" aria-labelledby="offcanvasVehicleEditLabel">
     <div class="offcanvas-header">
         <h5 class="text-dark" id="offcanvasVehicleEditLabel">Edit Vehicle</h5>
         <button class="btn btn-red btn-sm" type="button" data-bs-dismiss="offcanvas" aria-label="Close" onclick="formModalClose()">

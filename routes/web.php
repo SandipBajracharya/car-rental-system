@@ -7,6 +7,7 @@ use App\Http\Controllers\FacebookSocialiteController as FacebookSocialiteControl
 use App\Http\Controllers\Customer\AdditionalUserInfoController as AdditionalUserInfoController;
 use App\Http\Controllers\Customer\ReservationController as ReservationController;
 use App\Http\Controllers\GuestController as GuestController;
+use App\Http\Controllers\PayPalController as PayPalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,7 @@ Route::get('callback/google', [GoogleSocialiteController::class, 'handleCallback
 Route::get('auth/facebook', [FacebookSocialiteController::class, 'redirectToFacebook']);
 Route::get('callback/facebook', [FacebookSocialiteController::class, 'handleCallback']);
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => ['auth', 'verified']], function() {
     Route::post('/store-additional-user-info', [AdditionalUserInfoController::class, 'storeAdditionalInfo'])->name('user.store-addn-info');
     Route::post('/store-additional-user-info', [AdditionalUserInfoController::class, 'storeAdditionalInfo'])->name('user.store-addn-info');
 
@@ -55,3 +56,9 @@ Route::post('/process-reservation', [ReservationController::class, 'processCarRe
 
 // Check availability
 Route::get('/check-vehicle-availability/{vehicle_id}', [ReservationController::class, 'checkVehicleAvailability'])->name('check.availability');
+
+
+// Paypal
+Route::get('paywithpaypal', [PaypalController::class, 'payWithPaypal'])->name('paywithpaypal');
+Route::post('paypal', [PaypalController::class, 'postPaymentWithpaypal'])->name('paypal');
+Route::get('paypal', [PaypalController::class, 'getPaymentStatus'])->name('status');

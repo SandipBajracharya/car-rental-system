@@ -31,10 +31,14 @@
             </ul>
         </div>
         @if (!empty(auth()->user()->social_id))
-            <img class="avatar-initial-lg" src="{{auth()->user()->image}}" alt="profile pic">
-        @else
+            <div class="avatar-lg">
+                <img src="{{auth()->user()->image}}" alt="profile pic">
+            </div>
+            @else
             @if (!empty(auth()->user()->image))
-                <img class="avatar-initial-lg" src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                <div class="avatar-lg">
+                    <img src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                </div>
             @else
                 <div class="avatar-initial-lg">{{auth()->user()->initials}}</div>
             @endif

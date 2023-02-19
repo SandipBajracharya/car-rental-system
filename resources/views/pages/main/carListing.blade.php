@@ -15,7 +15,7 @@
         <div class="container">
             <h3 class="text-primary mb-40">Renting a Car is Easy!</h3>
             <form action="{{ route('find.car') }}" method="GET">
-                <div class="row gap-24-row mb-56">
+                <div class="row gap-24-row mb-24">
                     <div class="col-lg-4 col-md-6">
                         <label class="form-label" for="pickup_location">Pick-up Location</label>
                         <input class="form-control form-control-lg" placeholder="Pick-up Location" name="pickup_location" value="{{ count($inputs) > 0? ($inputs['pickup_location'] ?? '') : '' }}" />
@@ -34,9 +34,10 @@
                             <i class="lg ic-calendar"></i>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <button type="submit" class="btn btn-primary btn-lg w-100">Find a Car</button>
-                    </div>
+                </div>
+                <div class="gap-16 flex-end mb-56">
+                    <button  class="btn btn-outline-primary btn-lg">Reset Filter</button>
+                    <button type="submit" class="btn btn-primary btn-lg ">Find a Car</button>
                 </div>
             </form>
             <div class="row gap-24-row">

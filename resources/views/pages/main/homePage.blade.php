@@ -38,7 +38,7 @@
         <div class="hero-slider">
             <div class="hero-header">
                 <div class="hero-header__logo"><img src="./images/logo-light.svg" alt=""></div>
-                <ul class="gap-32">
+                <ul class="gap-32 align-center">
                     <li><a class="ic-burger-menu text-white h4" type="button" data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"></a>
                     </li>
@@ -48,10 +48,14 @@
                         <li class="dropdown">
                             <a class="align-center small" id="dropdownMenua" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 @if (!empty(auth()->user()->social_id))
-                                    <img class="avatar-initial-xl" src="{{auth()->user()->image}}" alt="profile pic">
-                                @else
+                                    <div class="avatar-xl">        
+                                        <img src="{{auth()->user()->image}}" alt="profile pic">
+                                    </div>
+                                    @else
                                     @if (!empty(auth()->user()->image))
-                                        <img class="avatar-initial-xl" src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                        <div class="avatar-xl">        
+                                            <img src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                        </div>
                                     @else
                                         <div class="avatar-initial-xl">{{auth()->user()->initials}}</div>
                                     @endif
@@ -61,10 +65,14 @@
                                 <div class="p-24"><small class="text-cGray600 mb-12">Logged in as</small>
                                     <div class="align-center">
                                         @if (!empty(auth()->user()->social_id))
-                                            <img class="avatar-initial-xxl" src="{{auth()->user()->image}}" alt="profile pic">
+                                        <div class="avatar-xxl">
+                                            <img src="{{auth()->user()->image}}" alt="profile pic">
+                                        </div>
                                         @else
                                             @if (!empty(auth()->user()->image))
-                                                <img class="avatar-initial-xxl" src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                            <div class="avatar-xxl">
+                                                <img src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                            </div>
                                             @else
                                                 <div class="avatar-initial-xxl">{{auth()->user()->initials}}</div>
                                             @endif

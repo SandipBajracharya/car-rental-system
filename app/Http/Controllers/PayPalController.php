@@ -34,41 +34,41 @@ class PaypalController extends Controller
         $this->_api_context->setConfig($paypal_configuration['settings']);
     }
 
-    public function payWithPaypal()
-    {
-        return view('paywithpaypal');
-    }
+    // public function payWithPaypal()
+    // {
+    //     return view('paywithpaypal');
+    // }
 
-    public function postPaymentWithpaypal(Request $request)
+    public function postPaymentWithpaypal($data)
     {
         $payer = new Payer();
         $payer->setPaymentMethod('paypal');
 
     	$item_1 = new Item();
 
-        $item_1->setName('Product 1')
-            ->setCurrency('USD')
+        $item_1->setName($data->vehicles->model)
+            ->setCurrency(config('paypal.currency'))
             ->setQuantity(1)
-            ->setPrice($request->get('amount'));
+            ->setPrice($data->amount);
 
         $item_list = new ItemList();
         $item_list->setItems(array($item_1));
 
         $amount = new Amount();
-        $amount->setCurrency('USD')
-            ->setTotal($request->get('amount'));
+        $amount->setCurrency(config('paypal.currency'))
+            ->setTotal($data->amount);
 
         $transaction = new Transaction();
         $transaction->setAmount($amount)
             ->setItemList($item_list)
-            ->setDescription('Enter Your transaction description');
+            ->setDescription($data->note);
 
         $redirect_urls = new RedirectUrls();
         $redirect_urls->setReturnUrl(URL::route('status'))
             ->setCancelUrl(URL::route('status'));
 
         $payment = new Payment();
-        $payment->setIntent('Sale')
+        $payment->setIntent('Sale')             // sale or order
             ->setPayer($payer)
             ->setRedirectUrls($redirect_urls)
             ->setTransactions(array($transaction));            
@@ -77,10 +77,10 @@ class PaypalController extends Controller
         } catch (\PayPal\Exception\PPConnectionException $ex) {
             if (\Config::get('app.debug')) {
                 \Session::put('error','Connection timeout');
-                return Redirect::route('paywithpaypal');                
+                return Redirect::route('paywithpaypal');
             } else {
                 \Session::put('error','Some error occur, sorry for inconvenient');
-                return Redirect::route('paywithpaypal');                
+                return Redirect::route('paywithpaypal');
             }
         }
 

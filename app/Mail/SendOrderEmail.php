@@ -38,14 +38,17 @@ class SendOrderEmail extends Mailable
         $process = $this->process;
         $name = $this->name;
         $order = $this->order;
-        if ($process == 1) {
+        if (strtolower($process) == 'active') {
             $subject = Lang::get('email')['subject_order'];
-        } else if ($process == 2) {
+            $content = Lang::get('email')['order_message'];
+        } else if (strtolower($process) == 'completed') {
             $subject = Lang::get('email')['subject_complete'];
+            $content = Lang::get('email')['completion_message'];
         } else {
             $subject = Lang::get('email')['subject_cancel'];
+            $content = Lang::get('email')['cancel_message'];
         }
         return $this->from($address = 'no-reply@mg.tarabooks.com', config('app.name'))
-        ->subject($subject)->markdown('emails.orderTemplate',compact('name','process','order'));
+        ->subject($subject)->markdown('emails.orderTemplate', compact('name', 'process', 'order', 'content'));
     }
 }

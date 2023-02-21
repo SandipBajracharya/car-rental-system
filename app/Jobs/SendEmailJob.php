@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class SendEmailJob implements ShouldQueue
 {
@@ -39,6 +40,11 @@ class SendEmailJob implements ShouldQueue
         $email = $data['email'];
         $process = $data['process'];
         $order = $data['order'];
-        Mail::to($email)->send(new SendOrderEmail($process, $name, $order));
+        try {
+            Mail::to($email)->send(new SendOrderEmail($process, $name, $order));
+            Log::channel('email_queue')->info('Email sent');
+        } catch (\Throwable $e) {
+            Log::channel('email_queue')->error($e->getMessage());
+        }
     }
 }

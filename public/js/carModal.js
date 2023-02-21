@@ -24,21 +24,42 @@ function checkVehicleAvailability(vehicleId) {
     let start_dt = $("#ca_sd").val();
     let end_dt = $("#ca_ed").val();
     let proceed = true;
+    let currDate = formatCurrentDate();
 
     if (!pick_location) {
         $("#pl_valn").css("display", "block");
         proceed = false;
+    } else {
+        $("#pl_valn").css("display", "none");
+        proceed = true;
     }
     if (!start_dt) {
         $("#sd_valn").css("display", "block");
         proceed = false;
+    } else {
+        if (start_dt < currDate) {
+            $("#sd_valn").css("display", "block");
+            $("#sd_valn").html("Pick up date should be greater or same as today");
+            proceed = false;
+        } else {
+            $("#sd_valn").css("display", "none");
+            proceed = true;
+        }
     }
     if (!end_dt) {
         $("#ed_valn").css("display", "block");
         proceed = false;
+    } else {
+        if (end_dt <= start_dt) {
+            $("#ed_valn").css("display", "block");
+            $("#ed_valn").html("Drop off date should be greater than pickup date");
+            proceed = false;
+        } else {
+            $("#ed_valn").css("display", "none");
+            proceed = true;
+        }
     }
 
-    console.log(proceed);
     if (proceed) {
         let ca_btn = $("#ca_btn");
         ca_btn.html("Checking...");
@@ -71,4 +92,34 @@ function checkVehicleAvailability(vehicleId) {
             });
         }, 2000);
     }
+}
+
+function formatCurrentDate()
+{
+    const dateObj = new Date();
+
+    let year = dateObj.getFullYear();
+    
+    let month = dateObj.getMonth();
+    month = ('0' + (month + 1)).slice(-2);
+    // To make sure the month always has 2-character-formate. For example, 1 => 01, 2 => 02
+
+    let date = dateObj.getDate();
+    date = ('0' + date).slice(-2);
+    // To make sure the date always has 2-character-formate
+
+    let hour = dateObj.getHours();
+    hour = ('0' + hour).slice(-2);
+    // To make sure the hour always has 2-character-formate
+
+    let minute = dateObj.getMinutes();
+    minute = ('0' + minute).slice(-2);
+    // To make sure the minute always has 2-character-formate
+
+    let second = dateObj.getSeconds();
+    second = ('0' + second).slice(-2);
+    // To make sure the second always has 2-character-formate
+
+    const time = `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+    return time;
 }

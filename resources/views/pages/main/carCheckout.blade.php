@@ -220,52 +220,86 @@
                             <input name="document_type" value="Driving license" type="hidden">
                         </form>
                     @else
-                        <div class="bg-white p-32">
+                        <div class="bg-white p-32 mb-24">
                             <h3 class="text-primary mb-24">Payment Method</h3>
-                            <form action="{{route('reserve.car')}}" method="POST">
-                                @csrf
-                                <div class="custom-radio-image">
-                                    <div class="align-center flex-column">
-                                        <input class="input-hidden" id="map1" type="radio" name="map" checked="">
-                                        <label class="border border-cool-gray-400" for="map1">
-                                            <img src="/images/master.png" alt="">
-                                        </label>
-                                    </div>
-                                    <div class="align-center flex-column">
-                                        <input class="input-hidden" id="map2" type="radio" name="map">
-                                        <label class="border border-cool-gray-400" for="map2">
-                                            <img src="/images/paypal.png" alt="">
-                                        </label>
+                            <div class="row mb-40 gap-24-row">
+                                <div class="col-md-6">
+                                    <div class="form-floating"><input class="form-control" id="floatingInput"
+                                            type="date" placeholder="Birth Date"><label for="floatingInput">Birth
+                                            Date</label></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating"><input class="form-control" id="floatingInput"
+                                            placeholder="License"><label for="floatingInput">License No.</label>
                                     </div>
                                 </div>
-                                <div class="form-floating mb-24"><input class="form-control" id="floatingInput"
-                                        placeholder="Cardholder Name"><label for="floatingInput">Cardholder Name</label></div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-floating mb-24"><input class="form-control" id="floatingInput"
-                                                placeholder="Cardholder Name"><label for="floatingInput">Cardholder Name</label>
+                                <div class="col-md-6">
+                                    <div class="form-floating"><input class="form-control" id="floatingInput"
+                                            placeholder="Country"><label for="floatingInput">Country</label></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating"><input class="form-control" id="floatingInput"
+                                            type="date" placeholder="Expiry Date"><label for="floatingInput">License
+                                            Expiry Date</label></div>
+                                </div>
+                            </div>
+                            <div class="form-check"><input class="form-check-input" type="checkbox" id="terms">
+                                <label class="form-check-label" for="terms">I agree to the 
+                                    <a class="fw-semibold text-primary" href="Privacy.html">Terms & Conditions</a>
+                                </label>
+                            </div>
+                            <div class="flex-end">
+                                <button class="btn btn-primary btn-lg mt-24" data-bs-target="#bookingSuccessModal" data-bs-toggle="modal">
+                                    Proceed to Payment
+                                </button>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="bookingSuccessModal" tabindex="-1" aria-labelledby="bookingSuccessModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog sm modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body p-md-72 p-24">
+                                        <div class="">
+                                            <h3 class="text-primary mb-24">Payment Method</h3>
+
+                                            <form action="{{route('reserve.car')}}" method="POST">
+                                                @csrf
+                                                <div class="custom-radio-image">
+                                                    <div class="align-center flex-column">
+                                                        <input class="input-hidden" id="map1" type="radio" name="pmt_gateway" value="master" checked="">
+                                                        <label class="border border-cool-gray-400" for="map1">
+                                                            <img src="/images/master.png" alt="">
+                                                        </label>
+                                                    </div>
+                                                    <div class="align-center flex-column">
+                                                        <input class="input-hidden" id="map2" type="radio" name="pmt_gateway" value="paypal">
+                                                        <label class="border border-cool-gray-400" for="map2">
+                                                            <img src="/images/paypal.png" alt="">
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <button type="submit">Submit</button>
+                                            </form>
+
+                                            @if ($message = Session::get('success'))
+                                                <div class="custom-alerts alert alert-success fade in">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                                    {!! $message !!}
+                                                </div>
+                                                <?php Session::forget('success');?>
+                                            @endif
+                            
+                                            @if ($message = Session::get('error'))
+                                                <div class="custom-alerts alert alert-danger fade in">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                                    {!! $message !!}
+                                                </div>
+                                                <?php Session::forget('error');?>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-floating mb-24"><input class="form-control" id="floatingInput"
-                                                placeholder="date"><label for="floatingInput">Date</label></div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-floating mb-24"><input class="form-control" id="floatingInput"
-                                                placeholder="ccv"><label for="floatingInput">CCV</label></div>
-                                    </div>
                                 </div>
-                                <div class="form-check"><input class="form-check-input" type="checkbox" id="terms">
-                                    <label class="form-check-label" for="terms">I agree to the 
-                                        <a class="fw-semibold text-primary" href="Privacy.html">Terms & Conditions</a>
-                                    </label>
-                                </div>
-                                <div class="flex-end">
-                                    <button class="btn btn-primary btn-lg mt-24" data-bs-target="#bookingSuccessModal" data-bs-toggle="modal">
-                                        Confirm your booking
-                                    </button>
-                                </div>
-                            </form>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -277,44 +311,38 @@
                                 <p>Pick-up Location</p>
                             </div>
                             <div class="col-7">
-                                <p class="fw-semibold">9/28 Albatross street</p>
+                                <p class="fw-semibold">{{$reserve_info['pickup_location'] ?? '-'}}</p>
                             </div>
                             <div class="col-5">
                                 <p>Pick-up Date</p>
                             </div>
                             <div class="col-7">
-                                <p class="fw-semibold">2022/12/17</p>
+                                <p class="fw-semibold">{{$reserve_info['start_dt']? date('Y/m/d', strtotime($reserve_info['start_dt'])) : '-'}}</p>
                             </div>
                             <div class="col-5">
                                 <p>Pick-up Time</p>
                             </div>
                             <div class="col-7">
-                                <p class="fw-semibold">10:00 AM</p>
-                            </div>
-                            <div class="col-5">
-                                <p>Drop-off Location</p>
-                            </div>
-                            <div class="col-7">
-                                <p class="fw-semibold">9/28 Albatross street</p>
+                                <p class="fw-semibold">{{$reserve_info['start_dt']? date('H:i A', strtotime($reserve_info['start_dt'])) : '-'}}</p>
                             </div>
                             <div class="col-5">
                                 <p>Drop-off Date</p>
                             </div>
                             <div class="col-7">
-                                <p class="fw-semibold">2022/12/19</p>
+                                <p class="fw-semibold">{{$reserve_info['end_dt']? date('Y/m/d', strtotime($reserve_info['end_dt'])) : '-'}}</p>
                             </div>
                             <div class="col-5">
                                 <p>Drop-off Time</p>
                             </div>
                             <div class="col-7">
-                                <p class="fw-semibold">10:00 AM</p>
+                                <p class="fw-semibold">{{$reserve_info['end_dt']? date('H:i A', strtotime($reserve_info['end_dt'])) : '-'}}</p>
                             </div>
                         </div>
                         <div class="flex-center-between">
                             <div>
                                 <h6 class="mb-4">Total Payable</h6><small>[Inc. VAT]</small>
                             </div>
-                            <h3>$40.00</h3>
+                            <h3>${{$total ?? 0.00}}</h3>
                         </div>
                     </div><a class="align-center text-primary fw-semibold" href="/car-listing"><i
                             class="ic-chevron-left mr-8"></i>Select Different Car</a>

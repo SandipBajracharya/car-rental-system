@@ -42,6 +42,9 @@
             <div class="row gap-24-row">
                 @if (isset($vehicles))
                     @foreach ($vehicles as $vehicle)
+                        {{-- login modal        --}}
+                        @includeWhen(!auth()->check(), 'include.main.bookingAliasModal', ['vehicle_id' => $vehicle->id])
+
                         @php
                             $images = json_decode($vehicle->images, true);
                             $cover_img = isset($images['0'])? $images['0'] : '';

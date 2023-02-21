@@ -120,7 +120,11 @@ class ReservationServices extends Model
         $date1 = date_create($reserve_info['start_dt']);
         $date2=date_create($reserve_info['end_dt']);
         $diff=date_diff($date1,$date2);
-        $amount = $diff->format("%a") * $vehicle_pricing->pricing;
+        if ($diff->format("%a") < 1) {
+            $amount = $vehicle_pricing->pricing;
+        } else {
+            $amount = $diff->format("%a") * $vehicle_pricing->pricing;
+        }
 
         return $amount;
     }
@@ -324,7 +328,7 @@ class ReservationServices extends Model
                     $email_data = ['email' => $guest->email, 'name' => $guest->full_name, 'process' => $request->status, 'order'=> $reservation];
                 } else {
                     $operator = null;
-                    $email_data = ['email' => $reservation->users->email, 'name' => $reservation->users->full_name.' '.$reservation->users->last_name, 'process' => $request->status, 'order'=> $reservation];
+                    $email_data = ['email' => $reservation->users->email, 'name' => $reservation->users->first_name.' '.$reservation->users->last_name, 'process' => $request->status, 'order'=> $reservation];
                 }
                 EmailHelper::emailSend($email_data);
                 $this->reservationLogService->updateLog('update', $desp, 'manual', $id, $operator);
@@ -405,8 +409,14 @@ class ReservationServices extends Model
                 $reservation->status = 'Completed';
                 $reservation->cron_last_execution = Carbon::now();
 
+                $guest = GuestInfo::where('reservation_id', $id)->first();
+                if (!empty($guest)) {
+                    $email_data = ['email' => $guest->email, 'name' => $guest->full_name, 'process' => 'Completed', 'order'=> $reservation];
+                } else {
+                    $email_data = ['email' => $reservation->users->email, 'name' => $reservation->users->first_name.' '.$reservation->users->last_name, 'process' => 'Completed', 'order'=> $reservation];
+                }
                 // send mail
-                $email_data = ['email' => $reservation->users->email, 'name' => $reservation->users->full_name.' '.$reservation->users->last_name, 'process' => 'Completed', 'order'=> $reservation];
+                // $email_data = ['email' => $reservation->users->email, 'name' => $reservation->users->first_name.' '.$reservation->users->last_name, 'process' => 'Completed', 'order'=> $reservation];
                 EmailHelper::emailSend($email_data);
             }
             $reservation->save();
@@ -422,5 +432,16 @@ class ReservationServices extends Model
     {
         $cron = date('i H d m *', strtotime($date));
         return $cron;
+    }
+
+    public function processPayment($resp, $request)
+    {
+        if ($request->pmt_gateway) {
+            $paypal = new PaypalController();
+            $response = $paypal->postPaymentWithpaypal($resp['data']);
+            
+        } else {
+            // stripe code here
+        }
     }
 }

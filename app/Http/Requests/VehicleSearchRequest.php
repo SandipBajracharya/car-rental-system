@@ -26,8 +26,8 @@ class VehicleSearchRequest extends FormRequest
     {
         return [
             'pickup_location' => 'required',
-            'start_dt' => 'required',
-            'end_dt' => 'required',
+            'start_dt' => 'required|date|after:yesterday',
+            'end_dt' => 'required|date|after_or_equal:start_dt',
         ];
     }
 
@@ -36,7 +36,9 @@ class VehicleSearchRequest extends FormRequest
         return [
             'pickup_location.required' => 'A pickup location is required',
             'start_dt.required' => 'A pickup datetime is required',
+            'start_dt.after' => 'Pickup date must be greater or same as today',
             'end_dt.required' => 'A drop-off datetime is required',
+            'end_dt.after_or_equal' => 'End date must be greater than pickup date',
         ];
     }
 

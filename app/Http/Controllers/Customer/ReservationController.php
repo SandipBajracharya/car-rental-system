@@ -34,12 +34,16 @@ class ReservationController extends Controller
     public function checkout(Request $request)
     {
         if (Auth::check()) {
-            session()->put('vehicle_id', $request->vehicle_id);
+            $vehicle_id = $request->vehicle_id;
+            $reserve_info = session()->get('rental_info');
+
+            session()->put('vehicle_id', $vehicle_id);
             session()->forget('is_guest');
             $is_guest = false;
             // check userinfo for proper documents and redirect if not found
             if (Auth::user()->can_reserve || Auth::user()->role_id == 1) {           //additional requirement for super admin
-                return view('pages.main.carCheckout', compact('is_guest'));
+                $total = $this->reservationService->getAmount($vehicle_id, $reserve_info);
+                return view('pages.main.carCheckout', compact('is_guest', 'total', 'reserve_info'));
             } else {
                 Alert::toast('Please complete your profile first!', 'info');
                 return redirect('/profile-setting');
@@ -51,10 +55,14 @@ class ReservationController extends Controller
 
     public function checkoutAsGuest(Request $request)
     {
-        session()->put('vehicle_id', $request->vehicle_id);
+        $reserve_info = session()->get('rental_info');
+        $vehicle_id = $request->vehicle_id;
+
+        session()->put('vehicle_id', $vehicle_id);
         session()->put('is_guest', true);
         $is_guest = true;
-        return view('pages.main.carCheckout', compact('is_guest'));
+        $total = $this->reservationService->getAmount($vehicle_id, $reserve_info);
+        return view('pages.main.carCheckout', compact('is_guest', 'total', 'reserve_info'));
     }
 
     public function processCarReservation(Request $request)
@@ -71,6 +79,9 @@ class ReservationController extends Controller
                 // send email to client
                 $email_data = ['email' => auth()->user()->email, 'name' => auth()->user()->first_name.' '.auth()->user()->last_name, 'process' => 'active', 'order'=> $resp['data']];
                 EmailHelper::emailSend($email_data);
+
+                // // payment integration
+                // $this->reservationService->processPayment($resp, $request);
 
                 Alert::toast($resp['message'], $resp['status']);
                 return redirect()->back();

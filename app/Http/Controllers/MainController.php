@@ -48,7 +48,8 @@ class MainController extends Controller
         $vehicle = $this->vehicleService->findVehicleById($id);
         $rental_info = session()->get('rental_info') ?? [];
         $show_filter = isset($rental_info) && count($rental_info) > 0? false : true;
-        $carDetail = view('include.main.carDetailModal', ['vehicle' => $vehicle, 'show_filter' => $show_filter, 'rental_info' => $rental_info])->render();
+        empty($vehicle->features)? $features = [] : $features = explode(',', $vehicle->features);
+        $carDetail = view('include.main.carDetailModal', ['vehicle' => $vehicle, 'show_filter' => $show_filter, 'rental_info' => $rental_info , 'features' => $features])->render();
         return compact('carDetail');
     }
 }

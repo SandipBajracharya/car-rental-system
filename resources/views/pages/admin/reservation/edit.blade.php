@@ -15,8 +15,7 @@
                         <h6 class="text-blue mb-8" id="e-reservation-client"> - </h6>
                         <p id="e-reservation-phone"> - </p>
                     </div>
-                </div><button class="btn btn-primary">View Invoice<i
-                        class="ml-8 ic-arrow-right"></i></button>
+                </div>
             </div>
             <div class="row gap-24-row">
                 <div class="col-12">

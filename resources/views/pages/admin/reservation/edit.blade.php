@@ -1,5 +1,5 @@
+<form action="" method="POST" id="reservation-edit-form">
 <div class="offcanvas offcanvas-end offcanvas-01" data-bs-backdrop="static" id="offcanvasReservationEdit" tabindex="-1" aria-labelledby="offcanvasReservationEditLabel">
-    <form action="" method="POST" id="reservation-edit-form">
         @csrf
         @method('PUT')
         <div class="offcanvas-header">
@@ -70,5 +70,5 @@
             </button>
             <button type="submit" class="btn btn-green">Submit</button>
         </div>
-    </form>
-</div>
+    </div>
+</form>

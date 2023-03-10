@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Models\Reservation;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,7 +16,17 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $reservations = Reservation::where('status', 'Active')->select('id', 'start_cron', 'end_cron', 'is_reserved')->get();
+
+        foreach ($reservations as $reservation) {
+            $expression = '';
+            if ($reservation->is_reserved) {
+                $expression = $reservation->end_cron;
+            } else {
+                $expression = $reservation->start_cron;
+            }
+            $schedule->command('run:reservations --id='.$reservation->id)->cron($expression)->appendOutputTo(storage_path('logs/file/Reservations.log'));
+        }
     }
 
     /**

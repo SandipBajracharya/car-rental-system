@@ -1,5 +1,5 @@
-<div class="offcanvas offcanvas-end offcanvas-01" id="offcanvasReservationEdit" tabindex="-1" aria-labelledby="offcanvasReservationEditLabel">
-    <form action="" method="POST" id="reservation-edit-form">
+<form action="" method="POST" id="reservation-edit-form">
+<div class="offcanvas offcanvas-end offcanvas-01" data-bs-backdrop="static" id="offcanvasReservationEdit" tabindex="-1" aria-labelledby="offcanvasReservationEditLabel">
         @csrf
         @method('PUT')
         <div class="offcanvas-header">
@@ -15,8 +15,7 @@
                         <h6 class="text-blue mb-8" id="e-reservation-client"> - </h6>
                         <p id="e-reservation-phone"> - </p>
                     </div>
-                </div><button class="btn btn-primary">View Invoice<i
-                        class="ml-8 ic-arrow-right"></i></button>
+                </div>
             </div>
             <div class="row gap-24-row">
                 <div class="col-12">
@@ -59,7 +58,7 @@
                     <select class="form-select" name="status">
                         <option selected="" value="Active">Active</option>
                         <option value="Completed">Completed</option>
-                        <option value="Canceled">Cancelled</option>
+                        <option value="Canceled">Canceled</option>
                     </select>
                 </div>
             </div>
@@ -71,5 +70,5 @@
             </button>
             <button type="submit" class="btn btn-green">Submit</button>
         </div>
-    </form>
-</div>
+    </div>
+</form>

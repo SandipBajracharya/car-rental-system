@@ -27,7 +27,7 @@
                         @csrf
                         <div class="mb-16">
                             <label class="form-label">Old Password</label>
-                            <input class="form-control form-control-lg @error('old_password') is-invalid @enderror" type="password" name="old_password" placeholder="" />
+                            <input class="form-control form-control-lg @error('old_password') is-invalid @enderror" type="password" name="old_password" placeholder="" required/>
                             
                             @error('old_password')
                                 <span class="invalid-feedback" role="alert">
@@ -37,7 +37,7 @@
                         </div>
                         <div class="mb-16">
                             <label class="form-label">New Password</label>
-                            <input class="form-control form-control-lg @error('password') is-invalid @enderror" type="password" name="password" placeholder="" />
+                            <input class="form-control form-control-lg @error('password') is-invalid @enderror" type="password" name="password" placeholder="" required/>
                             
                             @error('password')
                                 <span class="invalid-feedback" role="alert">
@@ -47,7 +47,7 @@
                         </div>
                         <div class="mb-16">
                             <label class="form-label">Confirm New Password</label>
-                            <input class="form-control form-control-lg" type="password" name="password_confirmation" placeholder="" />
+                            <input class="form-control form-control-lg" type="password" name="password_confirmation" placeholder="" required/>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg w-100">Submit</button>
                     </form>
@@ -70,6 +70,8 @@
                     </div>
                 </div>
                 <div class="col-xl-9 col-lg-8">
+                    @includeWhen(auth()->check() && empty(auth()->user()->profile), 'include.main.verificationAlert', ['message' => 'Please complete your profile to make any reservation.'])
+
                     <form action="{{route('userProfile.update')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <h5 class="mb-32" id="link-1">Personal Information</h5>

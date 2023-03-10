@@ -20,8 +20,8 @@ class VehicleServices
 
     public function findVehicleBySlug($slug, $select = [])
     {
-        $vehicle = Vehicle::where('slug', $slug)
-            ->where('availability', 1);
+        $vehicle = Vehicle::where('slug', $slug);
+            // ->where('availability', 1);
         if (count($select) > 0) {
             $vehicle = $vehicle->select($select);
         }

@@ -25,7 +25,7 @@ class GuestInfoRequest extends FormRequest
     {
         return [
             'full_name' => 'required',
-            'email' => 'required',
+            'email' => 'required|email',
             'country' => 'required',
             'state' => 'required',
             'city' => 'required',
@@ -36,7 +36,7 @@ class GuestInfoRequest extends FormRequest
             'document_type' => 'required',
             'document_number' => 'required|string',
             'document_country' => 'required|string',
-            'document_expire' => 'required|date',
+            'document_expire' => 'required|date|after:yesterday',
             'notes' => 'nullable|string',
         ];
     }
@@ -48,7 +48,8 @@ class GuestInfoRequest extends FormRequest
             'document_type.required' => 'Document type is required.',
             'document_number.required' => 'Document number is required.',
             'document_image.required' => 'Document image is required.',
-            'document_expire.required' => 'Document number is required.',
+            'document_expire.required' => 'Document expiry date is required.',
+            'document_expire.after' => 'Document has already expired.',
             'dob.date_format' => 'Date of birth format incorrect.',
             'postal_code.required' => 'Postal code is required',
             'dob.required' => 'Date of birth is required'

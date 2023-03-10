@@ -13,7 +13,9 @@
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
+        "paypal/rest-api-sdk-php": "^1.14",
         "realrashid/sweet-alert": "^5.1",
+        "stripe/stripe-php": "^10.7",
         "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {
@@ -39,7 +41,8 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "app/Helpers/RelatedCarsHelper.php"
+            "app/Helpers/RelatedCarsHelper.php",
+            "app/Helpers/CommonHelper.php"
         ]
     },
     "scripts": {

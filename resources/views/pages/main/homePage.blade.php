@@ -11,24 +11,29 @@
                             class="ic-close"></i></button>
                 </div>
                 <div class="modal-body p-24 pt-8">
-                    <div class="mb-16"><input class="form-control form-control-lg"
-                            placeholder="Pick-up Location" /><small></small></div>
-                    <div class="mb-16">
-                        <div class="form-icon trail"><input class="form-control form-control-lg"
-                                placeholder="Pickup Date" /><i class="lg ic-calendar"></i></div>
-                    </div>
-                    <div class="mb-16">
-                        <div class="form-icon trail"><input class="form-control form-control-lg"
-                                placeholder="Pickup Time" /><i class="lg ic-clock-outline"></i></div>
-                    </div>
-                    <div class="mb-16">
-                        <div class="form-icon trail"><input class="form-control form-control-lg"
-                                placeholder="Drop-off Date" /><i class="lg ic-calendar"></i></div>
-                    </div>
-                    <div class="mb-16">
-                        <div class="form-icon trail"><input class="form-control form-control-lg"
-                                placeholder="Drop-off Time" /><i class="lg ic-clock-outline"></i></div>
-                    </div><a class="btn btn-primary btn-lg w-100" href="/car-listing">Find a Car</a>
+                    <form action="{{ route('find.car') }}" method="GET">
+                        <div class="mb-16">
+                            <label class="form-label" for="">Pick-up Location</label>
+                            <div class="form-icon trail">
+                                <input class="form-control form-control-lg" placeholder="Pick-up Location" name="pickup_location" value="{{old('pickup_location')}}"/>
+                            </div>
+                        </div>
+                        <div class="mb-16">
+                            <label class="form-label" for="">Pickup-up Date & Time</label>
+                            <div class="form-icon trail">
+                                <input class="form-control form-control-lg" placeholder="Pickup-up Date &amp; Time" name="start_dt" type="datetime-local" value="{{old('start_dt')}}" />
+                                <i class="lg ic-calendar"></i>
+                            </div>
+                        </div>
+                        <div class="mb-16">
+                            <label class="form-label" for="">Drop-Off Date & Time</label>
+                            <div class="form-icon trail">
+                                <input class="form-control form-control-lg" placeholder="Drop-off Date &amp; Time" name="end_dt"  type="datetime-local" value="{{old('end_dt')}}" />
+                                <i class="lg ic-calendar"></i>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg w-100" type="submit">Find a Car</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -38,7 +43,7 @@
         <div class="hero-slider">
             <div class="hero-header">
                 <div class="hero-header__logo"><img src="./images/logo-light.svg" alt=""></div>
-                <ul class="gap-32">
+                <ul class="gap-32 align-center">
                     <li><a class="ic-burger-menu text-white h4" type="button" data-bs-toggle="offcanvas"
                             data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"></a>
                     </li>
@@ -48,10 +53,14 @@
                         <li class="dropdown">
                             <a class="align-center small" id="dropdownMenua" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 @if (!empty(auth()->user()->social_id))
-                                    <img class="avatar-initial-xl" src="{{auth()->user()->image}}" alt="profile pic">
-                                @else
+                                    <div class="avatar-xl">        
+                                        <img src="{{auth()->user()->image}}" alt="profile pic">
+                                    </div>
+                                    @else
                                     @if (!empty(auth()->user()->image))
-                                        <img class="avatar-initial-xl" src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                        <div class="avatar-xl">        
+                                            <img src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                        </div>
                                     @else
                                         <div class="avatar-initial-xl">{{auth()->user()->initials}}</div>
                                     @endif
@@ -61,10 +70,14 @@
                                 <div class="p-24"><small class="text-cGray600 mb-12">Logged in as</small>
                                     <div class="align-center">
                                         @if (!empty(auth()->user()->social_id))
-                                            <img class="avatar-initial-xxl" src="{{auth()->user()->image}}" alt="profile pic">
+                                        <div class="avatar-xxl">
+                                            <img src="{{auth()->user()->image}}" alt="profile pic">
+                                        </div>
                                         @else
                                             @if (!empty(auth()->user()->image))
-                                                <img class="avatar-initial-xxl" src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                            <div class="avatar-xxl">
+                                                <img src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                            </div>
                                             @else
                                                 <div class="avatar-initial-xxl">{{auth()->user()->initials}}</div>
                                             @endif
@@ -77,6 +90,10 @@
                                 </div>
                                 <p class="text-cGray600 mb-8 px-24">More options</p>
                                 <ul class="px-16 pb-16">
+                                    @if (auth()->user()->role->id == 1)
+                                        <li><a class="dropdown-item" href="/admin/dashboard">Dashboard</a></li>
+                                    @endif
+                                    <li><a class="dropdown-item" href="/booking-history">History</a></li>
                                     <li><a class="dropdown-item" href="/profile-setting">Profile Settings</a></li>
                                     {{-- <li><a class="dropdown-item" href="BookingHistory.html">Booking History</a></li> --}}
                                     {{-- <li><a class="dropdown-item" href="Faq.html">Faq</a></li> --}}
@@ -134,20 +151,20 @@
                         <div class="col-md-6">
                             <label class="text-white form-label" for="">Pick-up Location</label>
                             <div class="form-icon trail">
-                                <input class="form-control form-control-lg form-transparent" placeholder="Pick-up Location" name="pickup_location" />
+                                <input class="form-control form-control-lg form-transparent" placeholder="Pick-up Location" name="pickup_location" value="{{old('pickup_location')}}"/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="text-white form-label" for="">Pick-up Date & Time</label>
                             <div class="form-icon trail">
-                                <input class="form-control form-control-lg form-transparent" placeholder="Pickup-up Date &amp; Time" name="start_dt" type="datetime-local" />
+                                <input class="form-control form-control-lg form-transparent" placeholder="Pickup-up Date &amp; Time" name="start_dt" type="datetime-local" value="{{old('start_dt')}}" />
                                 <i class="lg ic-calendar"></i>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label class="text-white form-label" for="">Drop-off Date & Time</label>
                             <div class="form-icon trail">
-                                <input class="form-control form-control-lg form-transparent" placeholder="Drop-off Date &amp; Time" name="end_dt"  type="datetime-local" />
+                                <input class="form-control form-control-lg form-transparent" placeholder="Drop-off Date &amp; Time" name="end_dt"  type="datetime-local" value="{{old('end_dt')}}" />
                                 <i class="lg ic-calendar"></i>
                             </div>
                         </div>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Everest Car Rental</title>
+    <title>Everest Rental</title>
     <link href="{{asset('css/1.style.css')}}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
     @yield('page-specific-css')

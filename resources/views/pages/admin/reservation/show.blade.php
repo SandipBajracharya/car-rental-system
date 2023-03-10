@@ -1,4 +1,4 @@
-<div class="offcanvas offcanvas-end offcanvas-01" id="offcanvasReservationDetail" tabindex="-1" aria-labelledby="offcanvasReservationDetailLabel">
+<div class="offcanvas offcanvas-end offcanvas-01" data-bs-backdrop="static" id="offcanvasReservationDetail" tabindex="-1" aria-labelledby="offcanvasReservationDetailLabel">
     <div class="offcanvas-header">
         <h5 class="text-dark" id="offcanvasReservationDetailLabel">Reservation Details</h5><button
             class="btn btn-red btn-sm" type="button" data-bs-dismiss="offcanvas" aria-label="Close"><i
@@ -12,8 +12,7 @@
                     <h6 class="text-blue mb-8" id="show-reservation-client"> - </h6>
                     <p id="show-reservation-phone"> - </p>
                 </div>
-            </div><button class="btn btn-primary">View Invoice<i
-                    class="ml-8 ic-arrow-right"></i></button>
+            </div>
         </div>
         <div class="row gap-24-row">
             <div class="col-12">

@@ -30,7 +30,7 @@
                                 <th>Client</th>
                                 <th>Phone No.</th>
                                 <th>Vehicle</th>
-                                <th>Refund Type</th>
+                                {{-- <th>Refund Type</th> --}}
                                 <th>Amount</th>
                                 <th class="text-end pr-24">Action</th>
                             </tr>
@@ -49,7 +49,7 @@
                                 <th>Client</th>
                                 <th>Phone No.</th>
                                 <th>Vehicle</th>
-                                <th>Refund Type</th>
+                                {{-- <th>Refund Type</th> --}}
                                 <th>Amount</th>
                                 <th class="text-end pr-24">Action</th>
                             </tr>
@@ -95,7 +95,7 @@
                     {data: 'client', name: 'client'},
                     {data: 'phone_number', name: 'phone_number'},
                     {data: 'vehicle', name: 'vehicle'},
-                    {data: 'refund_type', name: 'refund_type'},
+                    // {data: 'refund_type', name: 'refund_type'},
                     {data: 'amount', name: 'amount'},
                     {data: 'action', name: 'action', orderable: false, searchable: false, class: 'flex-end'},
                 ]
@@ -143,7 +143,7 @@
                     {data: 'client', name: 'client'},
                     {data: 'phone_number', name: 'phone_number'},
                     {data: 'vehicle', name: 'vehicle'},
-                    {data: 'refund_type', name: 'refund_type'},
+                    // {data: 'refund_type', name: 'refund_type'},
                     {data: 'amount', name: 'amount'},
                     {data: 'action', name: 'action', orderable: false, searchable: false, class: 'flex-end'},
                 ]

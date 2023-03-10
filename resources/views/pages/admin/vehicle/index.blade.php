@@ -44,7 +44,7 @@
     <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js"></script>
 
-    <script>
+    {{-- <script>
         ClassicEditor
             .create( document.querySelector( '#c-vehicle_features' ) )
             .then( editor => {
@@ -62,7 +62,7 @@
             .catch( error => {
                 console.error( error );
             } );
-    </script>
+    </script> --}}
 
     @if (count($errors) > 0)
         <script>
@@ -72,6 +72,24 @@
                 let id = sessionStorage.getItem('id');
                 $('#offcanvasVehicleEdit').addClass('show');
                 $('#vehicle-edit-form').attr('action', `/admin/vehicle/${id}`);
+
+                // image list if error
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/vehicle/'+id+'/edit',
+                    success: function(resp) {
+                        let images = $.parseJSON(resp.images);
+                        let imgHtml = '';
+                        images.forEach(item => {
+                            imgHtml += '<li> <div class="align-center mr-2"> <i class="ic-file"></i> <span class="p">'+item+' </span> </div> </li>';
+                        });
+                        $('#e-vehicle_image_list').css('display', 'block');
+                        $('#e-vehicle_image_item').append(imgHtml);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
             }
         </script>
     @else
@@ -153,7 +171,6 @@
                     type: 'GET',
                     url: '/admin/vehicle/'+id+'/edit',
                     success: function(resp) {
-                        console.log(resp);
                         $('#e-vehicle_description').val(resp.description || '');
                         $('#e-vehicle_features').val(resp.features || '');
                         $('#e-vehicle_model').val(resp.model || '');
@@ -167,6 +184,13 @@
                         } else {
                             $('#e-vehicle_not_reserved').attr('selected', 'selected');
                         }
+                        let images = $.parseJSON(resp.images);
+                        let imgHtml = '';
+                        images.forEach(item => {
+                            imgHtml += '<li> <div class="align-center mr-2"> <i class="ic-file"></i> <span class="p">'+item+' </span> </div> </li>';
+                        });
+                        $('#e-vehicle_image_list').css('display', 'block');
+                        $('#e-vehicle_image_item').append(imgHtml);
                     },
                     error: function(error) {
                         console.log(error);

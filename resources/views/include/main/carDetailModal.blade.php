@@ -1,5 +1,3 @@
-@includeWhen(!auth()->check(), 'include.main.bookingAliasModal', ['vehicle_id' => $vehicle->id]);
-
 <div class="offcanvas-header">
     <h5 class="text-dark" id="offcanvasQuickVehicleDetailLabel">{{$vehicle->model}}</h5>
     <button class="btn btn-red btn-sm" type="button" data-bs-dismiss="offcanvas" aria-label="Close">
@@ -34,10 +32,13 @@
     <p class="mb-24">{{$vehicle->description}}</p>
     <h5 class="text-primary mb-24">Features</h5>
     <div class="row gap-24-row">
-        @if (isset($vehicle->features))
-            <div class="col-sm-6 align-center">
-                <h6 class="text-cGray600">{!! $vehicle->features !!}</h6>
-            </div>    
+        @if (count($features) > 0)
+            @foreach ($features as $feature)
+                <div class="col-sm-6 align-center">
+                    <i class="ic-double-check h4 mr-8 text-success"></i>
+                    <h6 class="text-cGray600">{{trim($feature)}}</h6>
+                </div>
+            @endforeach    
         @else
             <div class="col-sm-6 align-center">
                 <h6 class="text-cGray600">NA</h6>
@@ -54,8 +55,15 @@
 </div>
 <div class="offcanvas-footer p-16 gap-16 border-top border-gray200">
     <a class="flex-grow-1 btn btn-outline-primary btn-lg" href="/car-detail/{{$vehicle->slug}}">VIEW MORE</a>
-    <form action="" method="POST">
-        @csrf
-        <button type="submit" class="flex-grow-1 btn btn-primary btn-lg"> <i class="ic-car mr-4"></i>BOOK NOW</button>
-    </form>
+    @if (!$show_filter)
+        @if (auth()->check())
+            <a class="btn btn-primary btn-lg" type="button" href="/checkout?vehicle_id={{$vehicle->id}}">
+                <i class="ic-car mr-8"></i>BOOK NOW
+            </a>
+        @else
+            <a class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#bookingAliasModal">
+                <i class="ic-car mr-8"></i>BOOK NOW
+            </a>
+        @endif
+    @endif
 </div>

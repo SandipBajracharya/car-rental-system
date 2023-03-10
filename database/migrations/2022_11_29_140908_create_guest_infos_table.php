@@ -23,10 +23,10 @@ class CreateGuestInfosTable extends Migration
             $table->string('street');
             $table->string('postal_code');
             $table->date('dob');
-            $table->unsignedBigInteger('reservation_id');
+            $table->unsignedBigInteger('reservation_id')->nullable();
             $table->string('document_image');
             $table->enum('document_type', ['Citizenship', 'Driving license', 'Voters card']);
-            $table->string('document_number')->unique();
+            $table->string('document_number');
             $table->string('document_country');
             $table->date('document_expire')->nullable();
             $table->mediumText('notes')->nullable();

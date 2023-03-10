@@ -13,10 +13,14 @@
                     <li class="dropdown">
                         <a class="align-center small" id="dropdownMenua" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             @if (!empty(auth()->user()->social_id))
-                                <img class="avatar-initial-xl" src="{{auth()->user()->image}}" alt="profile pic">
+                                <div class="avatar-xl">    
+                                    <img  src="{{auth()->user()->image}}" alt="profile pic">
+                                </div>
                             @else
                                 @if (!empty(auth()->user()->image))
-                                    <img class="avatar-initial-xl" src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                    <div class="avatar-xl">
+                                        <img src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                    </div>
                                 @else
                                     <div class="avatar-initial-xl">{{auth()->user()->initials}}</div>
                                 @endif
@@ -26,10 +30,14 @@
                             <div class="p-24"><small class="text-cGray600 mb-12">Logged in as</small>
                                 <div class="align-center">
                                     @if (!empty(auth()->user()->social_id))
-                                        <img class="avatar-initial-xxl" src="{{auth()->user()->image}}" alt="profile pic">
+                                    <div class="avatar-xxl">
+                                        <img src="{{auth()->user()->image}}" alt="profile pic">
+                                    </div>    
                                     @else
                                         @if (!empty(auth()->user()->image))
-                                            <img class="avatar-initial-xxl" src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                        <div class="avatar-xxl">
+                                            <img src="/images/profilePictures/{{auth()->user()->image}}" alt="profile pic">
+                                        </div>    
                                         @else
                                             <div class="avatar-initial-xxl">{{auth()->user()->initials}}</div>
                                         @endif
@@ -42,8 +50,11 @@
                             </div>
                             <p class="text-cGray600 mb-8 px-24">More options</p>
                             <ul class="px-16 pb-16">
+                                @if (auth()->user()->role->id == 1)
+                                    <li><a class="dropdown-item" href="/admin/dashboard">Dashboard</a></li>
+                                @endif
+                                <li><a class="dropdown-item" href="/booking-history">History</a></li>
                                 <li><a class="dropdown-item" href="/profile-setting">Profile Settings</a></li>
-                                {{-- <li><a class="dropdown-item" href="BookingHistory.html">Booking History</a></li> --}}
                                 {{-- <li><a class="dropdown-item" href="Faq.html">Faq</a></li> --}}
                                 {{-- <li><a class="dropdown-item" href="Privacy.html">Terms & Conditions</a></li> --}}
                                 <li>

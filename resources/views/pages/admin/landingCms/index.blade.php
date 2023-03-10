@@ -43,6 +43,7 @@
                         <label class="form-label">First Vehicle</label>
                         <select class="form-select" name="vehicle1">
                             @if (isset($vehicles))
+                                <option value="">Select vehicle</option>
                                 @foreach ($vehicles as $vehicle)
                                     <option {{isset($topVehicle) && $topVehicle->vehicle1 === $vehicle->id? 'selected' : ''}} value="{{$vehicle->id}}">{{$vehicle->model}}</option>
                                 @endforeach
@@ -55,6 +56,7 @@
                         <label class="form-label">Second Vehicle</label>
                         <select class="form-select" name="vehicle2">
                             @if (isset($vehicles))
+                                <option value="">Select vehicle</option>
                                 @foreach ($vehicles as $vehicle)
                                     <option {{isset($topVehicle) && $topVehicle->vehicle2 === $vehicle->id? 'selected' : ''}} value="{{$vehicle->id}}">{{$vehicle->model}}</option>
                                 @endforeach
@@ -84,6 +86,19 @@
                 let id = sessionStorage.getItem('id');
                 $('#offcanvasHomeSliderEdit').addClass('show');
                 $('#home-slider-edit-form').attr('action', `/admin/home-slider/${id}`);
+
+                // image list if error
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/home-slider/'+id+'/edit',
+                    success: function(resp) {
+                        $('#e-home_slider_image_item').html(resp.images);
+                        $('#e-home_slider_image_list').css('display', 'block');
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
             }
         </script>
     @else
@@ -136,7 +151,8 @@
                     type: 'GET',
                     url: '/admin/home-slider/'+id+'/edit',
                     success: function(resp) {
-                        $('#e-home_slider_image').val(resp.image || '');
+                        $('#e-home_slider_image_item').html(resp.images);
+                        $('#e-home_slider_image_list').css('display', 'block');
                         $('#e-home_slider_heading').val(resp.heading || '');
                     },
                     error: function(error) {

@@ -50,8 +50,11 @@
                             </div>
                             <p class="text-cGray600 mb-8 px-24">More options</p>
                             <ul class="px-16 pb-16">
+                                @if (auth()->user()->role->id == 1)
+                                    <li><a class="dropdown-item" href="/admin/dashboard">Dashboard</a></li>
+                                @endif
+                                <li><a class="dropdown-item" href="/booking-history">History</a></li>
                                 <li><a class="dropdown-item" href="/profile-setting">Profile Settings</a></li>
-                                {{-- <li><a class="dropdown-item" href="BookingHistory.html">Booking History</a></li> --}}
                                 {{-- <li><a class="dropdown-item" href="Faq.html">Faq</a></li> --}}
                                 {{-- <li><a class="dropdown-item" href="Privacy.html">Terms & Conditions</a></li> --}}
                                 <li>

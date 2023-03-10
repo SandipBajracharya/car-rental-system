@@ -7,6 +7,10 @@ use App\Http\Controllers\Admin\PromoCodeController as PromoCodeController;
 use App\Http\Controllers\Admin\HomePageController as HomePageController;
 use App\Http\Controllers\Admin\ReservationController as ReservationController;
 use App\Http\Controllers\Admin\ReservationActivityLogController as ReservationActivityLogController;
+use App\Http\Controllers\Admin\FaqController as FaqController;
+use App\Http\Controllers\Admin\ContactController as ContactController;
+use App\Http\Controllers\Admin\FeedbackController as FeedbackController;
+use App\Http\Controllers\Admin\AboutUsController as AboutUsController;
 
 Route::group(['middleware' => ['admin-auth', 'verified'], 'prefix' => 'admin'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
@@ -21,6 +25,16 @@ Route::group(['middleware' => ['admin-auth', 'verified'], 'prefix' => 'admin'], 
     // landing CMS
     Route::resource('/home-slider', HomePageController::class);
     Route::put('/home-page/top-vehicles', [HomePageController::class, 'updateHomeTopVehicles'])->name('homepage.topVehicle');
+
+    // FAQ
+    Route::resource('/faq', FaqController::class);
+
+    // Contact
+    Route::resource('/contact', ContactController::class);
+    Route::resource('/feedback', FeedbackController::class);
+
+    // About Us
+    Route::resource('/about', AboutUsController::class);
 
     // Reservation
     Route::get('/active-reservations', [ReservationController::class, 'activeReservations'])->name('reservation.active');

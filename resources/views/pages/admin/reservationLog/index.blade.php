@@ -79,16 +79,18 @@
                     url: '/admin/reservation-notification/show/'+id,
                     success: function(resp) {
                         console.log(resp);
-                        // $('#show-reservation-initials').html(resp.initials || 'C');
-                        // $('#show-reservation-client').html(resp.client || 'NA');
-                        // $('#show-reservation-phone').html(resp.phone_number || 'NA');
-                        // $('#show-reservation-period').html(resp.reservation_period || 'NA');
-                        // $('#show-reservation-vehicle').html(resp.vehicle || 'NA');
-                        // $('#show-reservation-document_number').html(resp.document_number || 'NA');
-                        // $('#show-reservation-payment').html(resp.payment_mode || 'NA');
-                        // $('#show-reservation-amount').html('$'+resp.amount || '$0.00');
-                        // $('#show-reservation-email').html(resp.email || 'NA');
-                        // $('#show-reservation-pickup').html(resp.pickup_location || 'NA');
+                        $('#notification-title').html(resp.title || '-');
+                        $('#show-notification-description').html(resp.description || '-');
+                        $('#show-notification-type').html(resp.type || '-');
+                        $('#show-notification-performer').html(resp.performer || '-');
+                        $('#show-notification-status').html(resp.status || '-');
+                        $('#show-notification-code').html(resp.code || '-');
+                        $('#show-notification-model').html(resp.model || '-');
+                        $('#show-notification-period').html(resp.period || '-');
+                        $('#show-notification-amount').html(resp.amount || '-');
+                        $('#show-notification-user').html(resp.user || '-');
+                        $('#show-notification-phone').html(resp.phone || '-');
+                        $('#show-notification-email').html(resp.email || '-');
                     },
                     error: function(error) {
                         console.log(error);

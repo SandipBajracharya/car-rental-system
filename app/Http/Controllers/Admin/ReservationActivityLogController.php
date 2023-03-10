@@ -26,6 +26,7 @@ class ReservationActivityLogController extends Controller
     public function show($id)
     {
         $record = $this->reservationLogService->findById($id);
+        $record = $this->reservationLogService->formatActivity($record);
         $this->reservationLogService->markAsRead($id);
         return $record;
     }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\ReservationActivityLog;
+use App\Models\Reservation;
 
 use Auth;
 use DataTables;
@@ -12,17 +13,23 @@ class ReservationActivityLogServices
     public function updateLog($action, $description, $type, $reservation_id, $guest_id = null)
     {
         if ($action == 'create') {
-            $title = 'New Reservation Made';
+            $title = 'New Reservation';
         } else if ($action == 'update') {
             $title = 'Reservation Update';
         }
+
+        $reservation = Reservation::find($reservation_id);
         
         $data = [
             'title' => $title,
             'action' => $action,
             'description' => $description,
             'type' => $type,
-            'reservation_id' => $reservation_id
+            'reservation_id' => $reservation_id,
+            'amount' => $reservation->amount,
+            'reservation_period' => date('jS M Y H:i A', strtotime($reservation->start_dt)).' - '.date('jS M Y H:i A', strtotime($reservation->end_dt)),
+            'vehicle_model' => $reservation->vehicles->model,
+            'reservation_status' => $reservation->status,
         ];
 
         if ($type == 'manual'){
@@ -77,12 +84,6 @@ class ReservationActivityLogServices
                             aria-controls="offcanvasReservationLogShow" data-res_log_id="'.$row->id.'">
                             <i class="ic-show"></i>
                         </button>
-                        <button
-                            class="btn btn-ghost-gray btn-sm mark-read-btn" data-bs-toggle="modal"
-                            data-bs-target="#offcanvasReservationLogMarkRead" 
-                            aria-controls="offcanvasReservationLogMarkRead" data-res_log_id="'.$row->id.'">
-                            <i class="ic-edit"></i>
-                        </button>
                     </div>';
                 return $btn;
             })
@@ -96,5 +97,24 @@ class ReservationActivityLogServices
             'has_read' => 1
         ];
         ReservationActivityLog::where('id', $id)->update($content);
+    }
+
+    public function formatActivity($record)
+    {
+        $data = [
+            'title' => $record->title,
+            'description' => $record->description,
+            'type' => $record->type,
+            'performer' => $record->type == 'manual'? (!empty($record->user_id)? $record->users->first_name.' '.$record->users->last_name : $record->guest->full_name) : 'NA',
+            'status' => $record->reservation_status,
+            'code' => $record->reservation->reservation_code,
+            'model' => $record->vehicle_model,
+            'period' => $record->reservation_period,
+            'amount' => '$'.$record->amount,
+            'user' => !empty($record->reservation->is_guest)? ($record->reservation->guest->full_name) : ($record->reservation->users->first_name.' '.$record->reservation->users->last_name),
+            'phone' => !empty($record->reservation->is_guest)? ($record->reservation->guest->mobile_number) : ($record->reservation->users->mobile_number),
+            'email' => !empty($record->reservation->is_guest)? ($record->reservation->guest->email) : ($record->reservation->users->email)
+        ];
+        return $data;
     }
 }

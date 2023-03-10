@@ -17,7 +17,11 @@ class ReservationActivityLog extends Model
         'type',
         'user_id',
         'guest_id',
-        'reservation_id'
+        'reservation_id',
+        'amount',
+        'reservation_period',
+        'vehicle_model',
+        'reservation_status'
     ];
 
     public function users()

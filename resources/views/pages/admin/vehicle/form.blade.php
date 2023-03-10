@@ -9,6 +9,10 @@
                 </span>
             @enderror
         </div>
+        <div class="col-12" id="{{$operation}}-vehicle_image_list" style="display: none;">
+            <ul class="list-uploaded-file" id="{{$operation}}-vehicle_image_item">
+            </ul>
+        </div>
         <div class="col-12">
             <label class="form-label">Description</label>
             <textarea class="form-control @error('description') is-invalid @enderror" placeholder="Vehicle Description" name="description" id="{{$operation}}-vehicle_description" oninput="onFieldInput(event)" >{{old('description')}}</textarea>

@@ -13,5 +13,5 @@
             <button class="btn btn-outline-red" type="reset">Reset</button>
             <button class="btn btn-green" onclick="onSubmit('edit')">Submit</button>
         </div>
-</div>
+    </div>
 </form>

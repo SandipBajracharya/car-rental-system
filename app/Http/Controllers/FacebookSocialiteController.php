@@ -37,28 +37,33 @@ class FacebookSocialiteController extends Controller
                 if (Auth::user()->role->role == 'super-admin') {
                     return redirect('/admin/dashboard');
                 } else {
-                    return redirect('/customer/home');
+                    return redirect('/booking-history');
                 }
             } else {
                 $role = $this->roleModel->findOneByRole('customer');
+                $name = explode(" ", $user->getName());
+                $first_name = $name[0];
+                $last_name = $name[count($name) - 1];
+                $initials = substr($first_name, 0, 1).substr($last_name, 0, 1);
 
                 $newUser = User::updateOrCreate([
                     'social_id' => $user->getId(),
                 ],[
-                    'name' => $user->getName(),
+                    'first_name' => $first_name,
+                    'last_name' => $last_name,
+                    'initials' => $initials,
                     'email' => $user->getEmail(),
                     'password' => Hash::make($user->getName().'@'.$user->getId()),
                     'role_id' => $role->id,
                     'social_id' => $user->getId(),
                     'social_type' => 'facebook',
-                    'email_verified' => $user->user['email_verified'],
                     'email_verified_at' => Carbon::now(),
                 ]);
             }
 
             Auth::login($newUser);
             if (Auth::user()->role->role != 'super-admin') {
-                return redirect('/customer/home');
+                return redirect('/booking-history');
             } else {
                 return redirect('/admin/dashboard');
             }

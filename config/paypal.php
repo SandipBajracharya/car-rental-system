@@ -9,6 +9,5 @@ return [
         'log.LogEnabled' => true,
         'log.FileName' => storage_path() . '/logs/paypal.log',
         'log.LogLevel' => 'DEBUG'
-    ),
-    'currency' => env('PAYPAL_CURRENCY', 'AUD')
+    )
 ];

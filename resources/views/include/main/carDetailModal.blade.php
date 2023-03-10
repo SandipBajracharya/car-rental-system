@@ -55,7 +55,7 @@
 </div>
 <div class="offcanvas-footer p-16 gap-16 border-top border-gray200">
     <a class="flex-grow-1 btn btn-outline-primary btn-lg" href="/car-detail/{{$vehicle->slug}}">VIEW MORE</a>
-    @if ($show_filter)
+    @if (!$show_filter)
         @if (auth()->check())
             <a class="btn btn-primary btn-lg" type="button" href="/checkout?vehicle_id={{$vehicle->id}}">
                 <i class="ic-car mr-8"></i>BOOK NOW

@@ -5,4 +5,8 @@ function formModalClose()
     }
     sessionStorage.removeItem('action');
     sessionStorage.removeItem('id');
+    let list = document.getElementById('e-vehicle_image_item');
+    while (list.hasChildNodes()) {
+        list.removeChild(list.firstChild);
+    }
 }

@@ -14,14 +14,13 @@
                     <div class="collapse bg-primary900" id="subMenu-02">
                         <div class="gap-8-vertical px-16 pb-16">
                             <a class="sidebar__link" href="/admin/active-reservations">Active</a>
-                            <a class="sidebar__link" href="/admin/cancelled-reservations">Cancelled</a>
                             <a class="sidebar__link" href="/admin/completed-reservations">Completed</a>
+                            <a class="sidebar__link" href="/admin/cancelled-reservations">Canceled</a>
                         </div>
                     </div>
                 </li>
                 <li><a class="sidebar__link" href="/admin/vehicle" aria-current="page">Vehicles</a></li>
-                <li><a class="sidebar__link" href="/admin/promo-code" aria-current="page">Promo Codes</a></li>
-                {{-- <li><a class="sidebar__link" href="#" aria-current="page">Client</a></li> --}}
+                {{-- <li><a class="sidebar__link" href="/admin/promo-code" aria-current="page">Promo Codes</a></li> --}}
                 <li class="sub-menu">
                     <a class="sidebar__link sub-menu__title" data-bs-toggle="collapse" href="#subMenu-06" role="button" aria-expanded="false" aria-controls="collapseExample">
                         <span class="text-white">Customer Portal CMS</span>
@@ -30,9 +29,10 @@
                     <div class="collapse bg-primary900" id="subMenu-06">
                         <div class="gap-8-vertical px-16 pb-16">
                             <a class="sidebar__link" href="/admin/home-slider">Landing Page</a>
-                            {{-- <a class="sidebar__link" href="FaqCms.html">FAQ's</a> --}}
-                            {{-- <a class="sidebar__link" href="ContactCms.html">Contact</a> --}}
-                            {{-- <a class="sidebar__link" href="AboutCms.html">About</a> --}}
+                            <a class="sidebar__link" href="/admin/about">About Us</a>
+                            <a class="sidebar__link" href="/admin/contact">Contact</a>
+                            <a class="sidebar__link" href="/admin/faq">FAQs</a>
+                            <a class="sidebar__link" href="/admin/feedback">Feedbacks</a>
                         </div>
                     </div>
                 </li>

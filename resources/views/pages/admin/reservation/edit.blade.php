@@ -58,7 +58,7 @@
                     <select class="form-select" name="status">
                         <option selected="" value="Active">Active</option>
                         <option value="Completed">Completed</option>
-                        <option value="Canceled">Cancelled</option>
+                        <option value="Canceled">Canceled</option>
                     </select>
                 </div>
             </div>

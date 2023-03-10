@@ -119,6 +119,12 @@ return [
             'path' => storage_path('logs/email.log'),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
+
+        'general_error' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/generalError.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ]
     ],
 
 ];

@@ -25,8 +25,8 @@ class SuperAdminSeeder extends Seeder
             'first_name' => 'Admin',
             'last_name' => 'Admin',
             'initials' => 'AA',
-            'email' => 'sndp6.sb@gmail.com',
-            'password' => Hash::make('admin@123'),
+            'email' => config('credentials.email'),
+            'password' => Hash::make(config('credentials.password')),
             'role_id' => $role->id,
             'email_verified_at' => Carbon::now()
         ];

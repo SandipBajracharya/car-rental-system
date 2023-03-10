@@ -2,8 +2,7 @@
 
 @section('main-content')
     @php
-        $car = '2020 Ford Raptor (Auto) Dual Cab';
-        $breadcrumb_arr = ['Home' => '/', 'Our Cars' => '/car-listing', $car => '#'];
+        $breadcrumb_arr = ['Home' => '/', 'Checkout' => '#'];
     @endphp
     @include('include.main.innerHeader', ['breadcrumb_arr' => $breadcrumb_arr])
 
@@ -16,7 +15,7 @@
             <div class="row gap-24-row">
                 <div class="col-xl-8">
                     @if (isset($is_guest) && $is_guest)
-                        <form action="{{route('process_reservation.store')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('guest.store')}}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="bg-white p-32 mb-24">
                                 <h3 class="text-primary mb-24">Personal Details</h3>
@@ -172,48 +171,9 @@
                                     <textarea class="form-control" id="floatingTextarea" placeholder="Leave a comment here" name="notes" value="{{old('notes')}}"></textarea>
                                     <label for="floatingTextarea">Message</label>
                                 </div>
-                            </div>
-                            <div class="bg-white p-32">
-                                <h3 class="text-primary mb-24">Payment Method</h3>
-                                <div class="custom-radio-image">
-                                    <div class="align-center flex-column">
-                                        <input class="input-hidden" id="map1" type="radio" name="map" checked="">
-                                        <label class="border border-cool-gray-400" for="map1">
-                                            <img src="/images/master.png" alt="">
-                                        </label>
-                                    </div>
-                                    <div class="align-center flex-column">
-                                        <input class="input-hidden" id="map2" type="radio" name="map">
-                                        <label class="border border-cool-gray-400" for="map2">
-                                            <img src="/images/paypal.png" alt="">
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-floating mb-24"><input class="form-control" id="floatingInput"
-                                        placeholder="Cardholder Name"><label for="floatingInput">Cardholder Name</label></div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-floating mb-24"><input class="form-control" id="floatingInput"
-                                                placeholder="Cardholder Name"><label for="floatingInput">Cardholder Name</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-floating mb-24"><input class="form-control" id="floatingInput"
-                                                placeholder="date"><label for="floatingInput">Date</label></div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-floating mb-24"><input class="form-control" id="floatingInput"
-                                                placeholder="ccv"><label for="floatingInput">CCV</label></div>
-                                    </div>
-                                </div>
-                                <div class="form-check"><input class="form-check-input" type="checkbox" id="terms">
-                                    <label class="form-check-label" for="terms">I agree to the 
-                                        <a class="fw-semibold text-primary" href="Privacy.html">Terms & Conditions</a>
-                                    </label>
-                                </div>
                                 <div class="flex-end">
-                                    <button class="btn btn-primary btn-lg mt-24" type="submit" data-bs-target="#bookingSuccessModal" data-bs-toggle="modal">
-                                        Confirm your booking
+                                    <button type="submit" class="btn btn-primary btn-lg mt-24" >
+                                        Proceed to Payment
                                     </button>
                                 </div>
                             </div>
@@ -221,84 +181,37 @@
                         </form>
                     @else
                         <div class="bg-white p-32 mb-24">
-                            <h3 class="text-primary mb-24">Payment Method</h3>
+                            <h3 class="text-primary mb-24">Document Details</h3>
                             <div class="row mb-40 gap-24-row">
                                 <div class="col-md-6">
-                                    <div class="form-floating"><input class="form-control" id="floatingInput"
-                                            type="date" placeholder="Birth Date"><label for="floatingInput">Birth
-                                            Date</label></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating"><input class="form-control" id="floatingInput"
-                                            placeholder="License"><label for="floatingInput">License No.</label>
+                                    <div class="form-floating">
+                                        <input class="form-control" id="floatingInput" placeholder="Expiry Date" value="{{auth()->user()->first_name .' '.auth()->user()->last_name}}" disabled>
+                                        <label for="floatingInput">Document owner</label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-floating"><input class="form-control" id="floatingInput"
-                                            placeholder="Country"><label for="floatingInput">Country</label></div>
+                                    <div class="form-floating">
+                                        <input class="form-control" id="floatingInput" type="date" value="{{auth()->user()->profile->dob}}" disabled>
+                                        <label for="floatingInput">Birth Date</label>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-floating"><input class="form-control" id="floatingInput"
-                                            type="date" placeholder="Expiry Date"><label for="floatingInput">License
-                                            Expiry Date</label></div>
+                                    <div class="form-floating">
+                                        <input class="form-control" id="floatingInput" placeholder="Expiry Date" value="{{auth()->user()->profile->document_type}}" disabled>
+                                        <label for="floatingInput">Document type</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-check"><input class="form-check-input" type="checkbox" id="terms">
-                                <label class="form-check-label" for="terms">I agree to the 
-                                    <a class="fw-semibold text-primary" href="Privacy.html">Terms & Conditions</a>
-                                </label>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input class="form-control" id="floatingInput" value="{{auth()->user()->profile->document_number}}" disabled>
+                                        <label for="floatingInput">Document No.</label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="flex-end">
-                                <button class="btn btn-primary btn-lg mt-24" data-bs-target="#bookingSuccessModal" data-bs-toggle="modal">
+                                <a href="/payment-option" class="btn btn-primary btn-lg mt-24" >
                                     Proceed to Payment
-                                </button>
-                            </div>
-                        </div>
-                        <div class="modal fade" id="bookingSuccessModal" tabindex="-1" aria-labelledby="bookingSuccessModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog sm modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-body p-md-72 p-24">
-                                        <div class="">
-                                            <h3 class="text-primary mb-24">Payment Method</h3>
-
-                                            <form action="{{route('reserve.car')}}" method="POST">
-                                                @csrf
-                                                <div class="custom-radio-image">
-                                                    <div class="align-center flex-column">
-                                                        <input class="input-hidden" id="map1" type="radio" name="pmt_gateway" value="master" checked="">
-                                                        <label class="border border-cool-gray-400" for="map1">
-                                                            <img src="/images/master.png" alt="">
-                                                        </label>
-                                                    </div>
-                                                    <div class="align-center flex-column">
-                                                        <input class="input-hidden" id="map2" type="radio" name="pmt_gateway" value="paypal">
-                                                        <label class="border border-cool-gray-400" for="map2">
-                                                            <img src="/images/paypal.png" alt="">
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <button type="submit">Submit</button>
-                                            </form>
-
-                                            @if ($message = Session::get('success'))
-                                                <div class="custom-alerts alert alert-success fade in">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                                                    {!! $message !!}
-                                                </div>
-                                                <?php Session::forget('success');?>
-                                            @endif
-                            
-                                            @if ($message = Session::get('error'))
-                                                <div class="custom-alerts alert alert-danger fade in">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                                                    {!! $message !!}
-                                                </div>
-                                                <?php Session::forget('error');?>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                     @endif
@@ -344,8 +257,10 @@
                             </div>
                             <h3>${{$total ?? 0.00}}</h3>
                         </div>
-                    </div><a class="align-center text-primary fw-semibold" href="/car-listing"><i
-                            class="ic-chevron-left mr-8"></i>Select Different Car</a>
+                    </div>
+                    <a class="align-center text-primary fw-semibold" href="{{getCarListUrl()}}">
+                        <i class="ic-chevron-left mr-8"></i>Select Different Car
+                    </a>
                 </div>
             </div>
         </div>

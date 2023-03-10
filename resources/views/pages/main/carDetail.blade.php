@@ -2,14 +2,21 @@
 
 @section('main-content')
     @php
-        $car = '2020 Ford Raptor (Auto) Dual Cab';
-        $breadcrumb_arr = ['Home' => '/', 'Our Cars' => '/car-listing', $car => '#'];
+        $car = $vehicle->model;
+        $breadcrumb_arr = ['Home' => '/', 'Our Cars' => getCarListUrl(), $car => '#']; 
     @endphp
     @include('include.main.innerHeader', ['breadcrumb_arr' => $breadcrumb_arr])
     @includeWhen(!auth()->check(), 'include.main.bookingAliasModal', ['vehicle_id' => $vehicle->id])
 
     <section class="car-detail py-md-88 py-64 bg-gray50">
         <div class="container">
+            {{-- alerts for email verification and profile complete  --}}
+            @if (auth()->check() && !auth()->user()->checkEmailVerified())
+                @include('include.main.verificationAlert', ['message' => 'Please verify your email address and complete your profile in order to make any kind of reservation.', 'link' => '/email/verify'])
+            @elseif (auth()->check() && empty(auth()->user()->profile))
+                @include('include.main.verificationAlert', ['message' => 'Please complete your profile to make any reservation.', 'link' => '/profile-setting'])
+            @endif
+            
             <div class="row mb-88 gap-32-row">
                 <div class="col-lg-6">
                     <div class="tab-content mb-32" id="myTabContent">
@@ -55,40 +62,46 @@
                             </div>
                         @endif
                     </div>
-                    @if ($show_filter)                        
-                        <div class="row gap-24-row mb-24" id="availability-section">
-                            <div class="col-md-6">
-                                <label for="">Pickup Location:</label> <span class="text-danger">*</span>
-                                <input class="form-control form-control-lg" placeholder="Pick-up Location" name="pickup_location" id="ca_pl" value="{{ old('pickup_location') }}" />
-                                <small><span class="text-danger" id="pl_valn" style="display: none;">Pickup location is required</span></small>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="">Start date:</label> <span class="text-danger">*</span>
-                                <div class="form-icon trail">
-                                    <input class="form-control form-control-lg" placeholder="Pickup-up Date &amp; Time" type="datetime-local" name="start_dt" id="ca_sd" value="{{ old('start_dt') }}" />
-                                    <i class="lg ic-calendar"></i>
+                    @if (!$vehicle->availability)
+                        <div class="alert alert-danger text-center">
+                            <p>Sorry! This car is not available at the moment.</p>
+                        </div>
+                    @else
+                        @if ($show_filter)                        
+                            <div class="row gap-24-row mb-24" id="availability-section">
+                                <div class="col-md-6">
+                                    <label for="">Pickup Location:</label> <span class="text-danger">*</span>
+                                    <input class="form-control form-control-lg" placeholder="Pick-up Location" name="pickup_location" id="ca_pl" value="{{ old('pickup_location') }}" />
+                                    <small><span class="text-danger" id="pl_valn" style="display: none;">Pickup location is required</span></small>
                                 </div>
-                                <small><span class="text-danger" id="sd_valn" style="display: none;">Pick-up date is required</span></small>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="">End date:</label> <span class="text-danger">*</span>
-                                <div class="form-icon trail">
-                                    <input class="form-control form-control-lg" placeholder="Drop-off Date &amp; Time" type="datetime-local" name="end_dt" id="ca_ed" value="{{ old('end_dt') }}" />
-                                    <i class="lg ic-calendar"></i>
+                                <div class="col-md-6">
+                                    <label for="">Start date:</label> <span class="text-danger">*</span>
+                                    <div class="form-icon trail">
+                                        <input class="form-control form-control-lg" placeholder="Pickup-up Date &amp; Time" type="datetime-local" name="start_dt" id="ca_sd" value="{{ old('start_dt') }}" />
+                                        <i class="lg ic-calendar"></i>
+                                    </div>
+                                    <small><span class="text-danger" id="sd_valn" style="display: none;">Pick-up date is required</span></small>
                                 </div>
-                                <small><span class="text-danger" id="ed_valn" style="display: none;">Drop-off date is required</span></small>
+                                <div class="col-md-6">
+                                    <label for="">End date:</label> <span class="text-danger">*</span>
+                                    <div class="form-icon trail">
+                                        <input class="form-control form-control-lg" placeholder="Drop-off Date &amp; Time" type="datetime-local" name="end_dt" id="ca_ed" value="{{ old('end_dt') }}" />
+                                        <i class="lg ic-calendar"></i>
+                                    </div>
+                                    <small><span class="text-danger" id="ed_valn" style="display: none;">Drop-off date is required</span></small>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-end">
+                                    <button class="btn btn-primary btn-lg w-100" onclick="checkVehicleAvailability({{$vehicle->id}})" id="ca_btn">Check Availability</button>
+                                </div>
                             </div>
-                            <div class="col-md-6 d-flex align-items-end">
-                                <button class="btn btn-primary btn-lg w-100" onclick="checkVehicleAvailability({{$vehicle->id}})" id="ca_btn">Check Availability</button>
+                            <div class="row gap-24-row mb-24 text-success flex-center ca_vf" id="car-available" style="display: none">
+                                This vehicle is available for booking.!
                             </div>
-                        </div>
-                        <div class="row gap-24-row mb-24 text-success flex-center ca_vf" id="car-available" style="display: none">
-                            This vehicle is available for booking.!
-                        </div>
-                        <div class="row gap-24-row mb-24 text-danger flex-center ca_vnf" id="car-unavailable" style="display: none">
-                            Sorry! This vehicle is not available for time being. <br>
-                            Please try booking other vehicles.
-                        </div>
+                            <div class="row gap-24-row mb-24 text-danger flex-center ca_vnf" id="car-unavailable" style="display: none">
+                                Sorry! This vehicle is not available for time being. <br>
+                                Please try booking other vehicles.
+                            </div>
+                        @endif
                     @endif
                     <div class="border-top border-gray200 mt-24 pt-24 flex-end">
                         <div>
@@ -99,30 +112,32 @@
                         </div>
                     </div>
                 </div>
-                @if ($show_filter)
-                    <div class="flex-end border-top border-gray200 pt-24 mt-24 ca_vf" style="display: none;">
-                        @if (auth()->check())
-                            <a class="btn btn-primary btn-lg" type="button" href="/checkout?vehicle_id={{$vehicle->id}}">
-                                <i class="ic-car mr-8"></i>BOOK NOW
-                            </a>
-                        @else
-                            <a class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#bookingAliasModal">
-                                <i class="ic-car mr-8"></i>BOOK NOW
-                            </a>
-                        @endif
-                    </div>
-                @else
-                    <div class="flex-end border-top border-gray200 pt-24 mt-24">
-                        @if (auth()->check())
-                            <a class="btn btn-primary btn-lg" type="button" href="/checkout?vehicle_id={{$vehicle->id}}">
-                                <i class="ic-car mr-8"></i>BOOK NOW
-                            </a>
-                        @else
-                            <a class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#bookingAliasModal">
-                                <i class="ic-car mr-8"></i>BOOK NOW
-                            </a>
-                        @endif
-                    </div>
+                @if ($vehicle->availability)
+                    @if ($show_filter)
+                        <div class="flex-end border-top border-gray200 pt-24 mt-24 ca_vf" style="display: none;">
+                            @if (auth()->check())
+                                <a class="btn btn-primary btn-lg" type="button" href="/checkout?vehicle_id={{$vehicle->id}}">
+                                    <i class="ic-car mr-8"></i>BOOK NOW
+                                </a>
+                            @else
+                                <a class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#bookingAliasModal">
+                                    <i class="ic-car mr-8"></i>BOOK NOW
+                                </a>
+                            @endif
+                        </div>
+                    @else
+                        <div class="flex-end border-top border-gray200 pt-24 mt-24">
+                            @if (auth()->check())
+                                <a class="btn btn-primary btn-lg" type="button" href="/checkout?vehicle_id={{$vehicle->id}}">
+                                    <i class="ic-car mr-8"></i>BOOK NOW
+                                </a>
+                            @else
+                                <a class="btn btn-primary btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#bookingAliasModal">
+                                    <i class="ic-car mr-8"></i>BOOK NOW
+                                </a>
+                            @endif
+                        </div>
+                    @endif
                 @endif
             </div>
             <div class="row gx-md-48 gap-48-row">

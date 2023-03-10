@@ -33,30 +33,36 @@ function checkVehicleAvailability(vehicleId) {
         $("#pl_valn").css("display", "none");
         proceed = true;
     }
-    if (!start_dt) {
-        $("#sd_valn").css("display", "block");
-        proceed = false;
-    } else {
-        if (start_dt < currDate) {
+
+    if (proceed) {
+        if (!start_dt) {
             $("#sd_valn").css("display", "block");
-            $("#sd_valn").html("Pick up date should be greater or same as today");
             proceed = false;
         } else {
-            $("#sd_valn").css("display", "none");
-            proceed = true;
+            if (start_dt < currDate) {
+                $("#sd_valn").css("display", "block");
+                $("#sd_valn").html("Pick up date should be greater or same as today");
+                proceed = false;
+            } else {
+                $("#sd_valn").css("display", "none");
+                proceed = true;
+            }
         }
     }
-    if (!end_dt) {
-        $("#ed_valn").css("display", "block");
-        proceed = false;
-    } else {
-        if (end_dt <= start_dt) {
+
+    if (proceed) {
+        if (!end_dt && proceed) {
             $("#ed_valn").css("display", "block");
-            $("#ed_valn").html("Drop off date should be greater than pickup date");
             proceed = false;
         } else {
-            $("#ed_valn").css("display", "none");
-            proceed = true;
+            if (end_dt <= start_dt && proceed) {
+                $("#ed_valn").css("display", "block");
+                $("#ed_valn").html("Drop off date should be greater than pickup date");
+                proceed = false;
+            } else {
+                $("#ed_valn").css("display", "none");
+                proceed = true;
+            }
         }
     }
 

@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'reservation_code',
@@ -27,7 +28,8 @@ class Reservation extends Model
         'has_refunded',
         'start_cron',
         'end_cron',
-        'cron_last_execution'
+        'cron_last_execution',
+        'payment_gateway'
     ];
 
     public function users()

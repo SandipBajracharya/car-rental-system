@@ -23,9 +23,10 @@ class CreateReservationActivityLogTable extends Migration
             $table->unsignedBigInteger('guest_id')->nullable();
             $table->unsignedBigInteger('reservation_id')->nullable();
             $table->tinyInteger('has_read')->default(0);
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade');
-            $table->foreign('guest_id')->references('id')->on('guest_infos')->onUpdate('cascade');
-            $table->foreign('reservation_id')->references('id')->on('reservations')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('guest_id')->references('id')->on('guest_infos')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('reservation_id')->references('id')->on('reservations')->onUpdate('cascade')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -10,7 +10,6 @@
     {{-- car detail modal --}}
     <div class="offcanvas offcanvas-end offcanvas-01" id="offcanvasQuickVehicleDetail" tabindex="-1" aria-labelledby="offcanvasQuickVehicleDetailLabel">
     </div>
-
     <section class="car-listing bg-gray50 py-md-88 py-64">
         <div class="container">
             <h3 class="text-primary mb-40">Renting a Car is Easy!</h3>

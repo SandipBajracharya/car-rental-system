@@ -157,8 +157,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label" for="formFile">Driver License Image/PDF</label>
-                                        <input class="form-control @error('document_image') is-invalid @enderror" id="formFile" type="file" name="document_image"></div>
+                                        <label class="form-label" for="formFile">Driver License Image</label>
+                                        <input class="form-control @error('document_image') is-invalid @enderror" id="formFile" type="file" name="document_image" accept="image/*"></div>
 
                                         @error('document_image')
                                             <span class="invalid-feedback" role="alert">

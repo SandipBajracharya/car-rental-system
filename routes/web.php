@@ -8,7 +8,7 @@ use App\Http\Controllers\Customer\AdditionalUserInfoController as AdditionalUser
 use App\Http\Controllers\Customer\ReservationController as ReservationController;
 use App\Http\Controllers\GuestController as GuestController;
 Use App\Http\Controllers\Customer\CustomerController as CustomerController;
-use App\Http\Controllers\PayPalController as PayPalController;
+use App\Http\Controllers\PaypalController as PaypalController;
 use App\Http\Controllers\StripeController as StripeController;
 
 /*

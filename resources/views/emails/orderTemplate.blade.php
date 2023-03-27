@@ -140,7 +140,7 @@
                             display: block;
                         "
                         >
-                        Paypal
+                        {{$order->payment_gateway}}
                         </span>
                     </td>
                     <td style="vertical-align: top; width: 50%">

@@ -38,7 +38,7 @@
                                 <td class="pl-24">{{$item->reservation_code}}</td>
                                 <td><img src="/images/vehicles/{{$image[0]}}" alt="" /></td>
                                 <td>{{$item->vehicles->model}}</td>
-                                <td>{{date('H:i A jS M Y', strtotime($item->start_dt))}} - {{date('H:i A jS M Y', strtotime($item->start_dt))}}</td>
+                                <td>{{date('H:i A jS M Y', strtotime($item->start_dt))}} - {{date('H:i A jS M Y', strtotime($item->end_dt))}}</td>
                                 <td>
                                     <div class="badge {{strtolower($item->status) == 'active'? 'badge-primary' : (strtolower($item->status) == 'completed'? 'badge-green': 'badge-red')}}">{{$item->status}}</div>
                                 </td>

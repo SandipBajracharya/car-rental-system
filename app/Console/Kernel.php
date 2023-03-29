@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 use App\Models\Reservation;
 
 class Kernel extends ConsoleKernel
@@ -16,6 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        Log::channel('schedular_error')->info('***** SCHEDULE START ******');
         $reservations = Reservation::where('status', 'Active')->select('id', 'start_cron', 'end_cron', 'is_reserved')->get();
 
         foreach ($reservations as $reservation) {
@@ -27,6 +29,7 @@ class Kernel extends ConsoleKernel
             }
             $schedule->command('run:reservations --id='.$reservation->id)->cron($expression)->appendOutputTo(storage_path('logs/file/sheduleError.log'));
         }
+        Log::channel('schedular_error')->info('***** SCHEDULE END ******');
     }
 
     /**

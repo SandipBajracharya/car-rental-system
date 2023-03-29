@@ -124,7 +124,13 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/generalError.log'),
             'level' => env('LOG_LEVEL', 'debug'),
-        ]
+        ],
+
+        'schedular_error' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/file/sheduleError.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
     ],
 
 ];

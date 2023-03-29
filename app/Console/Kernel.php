@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
             } else {
                 $expression = $reservation->start_cron;
             }
-            $schedule->command('run:reservations --id='.$reservation->id)->cron($expression)->appendOutputTo(storage_path('logs/file/Reservations.log'));
+            $schedule->command('run:reservations --id='.$reservation->id)->cron($expression)->appendOutputTo(storage_path('logs/file/sheduleError.log'));
         }
     }
 

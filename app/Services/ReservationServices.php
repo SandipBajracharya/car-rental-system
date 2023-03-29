@@ -528,9 +528,11 @@ class ReservationServices extends Model
             }
             $reservation->save();
             ObjectHelper::getReservationActivityObject()->updateLog('update', $desp, 'auto', $id, $operator);
-
+            Log::channel('schedular_error')->info('Reservation update Complete for '.$reservation->reservation_code);
+            
             return ['status' => 'success', 'message' => 'success'];
         } catch (\Throwable $e) {
+            Log::channel('schedular_error')->error($e->getMessage());
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }

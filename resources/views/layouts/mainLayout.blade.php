@@ -7,6 +7,7 @@
     <title>Everest Rental</title>
     <link href="{{asset('css/1.style.css')}}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
+    <link rel="icon" href="{{asset('images/logo.svg') }}">
     @yield('page-specific-css')
 </head>
 

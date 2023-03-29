@@ -9,6 +9,7 @@ use App\Helpers\ObjectHelper;
 
 use Session;
 use Stripe;
+use Redirect;
 
 class StripeController extends Controller
 {

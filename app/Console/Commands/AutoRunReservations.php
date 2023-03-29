@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use App\Services\ReservationServices;
 use Carbon\Carbon;
 
@@ -39,6 +40,7 @@ class AutoRunReservations extends Command
      */
     public function handle()
     {
+        Log::channel('schedular_error')->info('*** Command Start ***');
         echo Carbon::now() ." COMMAND START".PHP_EOL;
         $id = $this->option('id');
         $service = new ReservationServices();
@@ -47,5 +49,6 @@ class AutoRunReservations extends Command
             echo $res['message'];
         }
         echo Carbon::now() ." COMMAND COMPLETED".PHP_EOL;
+        Log::channel('schedular_error')->info('*** Command Completed ***');
     }
 }

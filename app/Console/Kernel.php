@@ -17,10 +17,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        Log::channel('schedular_error')->info('***** SCHEDULE START ******');
         $reservations = Reservation::where('status', 'Active')->select('id', 'start_cron', 'end_cron', 'is_reserved')->get();
-
+        
         foreach ($reservations as $reservation) {
+            Log::channel('schedular_error')->info('***** SCHEDULE START ******');
             $expression = '';
             if ($reservation->is_reserved) {
                 $expression = $reservation->end_cron;
@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
                 $expression = $reservation->start_cron;
             }
             $schedule->command('run:reservations --id='.$reservation->id)->cron($expression)->appendOutputTo(storage_path('logs/file/sheduleError.log'));
+            Log::channel('schedular_error')->info('***** SCHEDULE END ******');
         }
-        Log::channel('schedular_error')->info('***** SCHEDULE END ******');
     }
 
     /**

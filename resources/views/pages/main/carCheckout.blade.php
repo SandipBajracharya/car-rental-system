@@ -47,6 +47,18 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating">
+                                            <input class="form-control @error('mobile_number') is-invalid @enderror" id="floatingInput" name="mobile_number" type="text" value="{{old('mobile_number')}}" placeholder="Contact number">
+                                            <label for="floatingInput">Contact number</label>
+
+                                            @error('mobile_number')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
                                             <input class="form-control @error('country') is-invalid @enderror" id="floatingInput" name="country" value="{{old('country')}}" placeholder="Country">
                                             <label for="floatingInput">Country</label>
 
@@ -158,13 +170,14 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label" for="formFile">Driver License Image</label>
-                                        <input class="form-control @error('document_image') is-invalid @enderror" id="formFile" type="file" name="document_image" accept="image/*"></div>
+                                        <input class="form-control @error('document_image') is-invalid @enderror" id="formFile" type="file" name="document_image" accept="image/*">
 
                                         @error('document_image')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
+                                    </div>
                                 </div>
                                 <h5 class="mb-16">Additional Information</h5>
                                 <div class="form-floating h-100">

@@ -7,7 +7,7 @@
     <div class="offcanvas-body">
         <div class="flex-center-between mb-24 border-bottom pb-24">
             <div class="align-center">
-                <div class="avatar-initial-xxl mr-16" id="show-reservation-initials">SB</div>
+                <div class="avatar-initial-xxl mr-16" id="show-reservation-initials">C</div>
                 <div>
                     <h6 class="text-blue mb-8" id="show-reservation-client"> - </h6>
                     <p id="show-reservation-phone"> - </p>

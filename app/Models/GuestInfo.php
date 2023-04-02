@@ -12,6 +12,7 @@ class GuestInfo extends Model
     protected $fillable = [
         'full_name',
         'email',
+        'mobile_number',
         'country',
         'state',
         'city',

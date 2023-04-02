@@ -34,11 +34,7 @@ class FacebookSocialiteController extends Controller
 
             if ($finduser) {
                 Auth::login($finduser);
-                if (Auth::user()->role->role == 'super-admin') {
-                    return redirect('/admin/dashboard');
-                } else {
-                    return redirect('/booking-history');
-                }
+                return redirect()->intended();
             } else {
                 $role = $this->roleModel->findOneByRole('customer');
                 $name = explode(" ", $user->getName());
@@ -62,11 +58,7 @@ class FacebookSocialiteController extends Controller
             }
 
             Auth::login($newUser);
-            if (Auth::user()->role->role != 'super-admin') {
-                return redirect('/booking-history');
-            } else {
-                return redirect('/admin/dashboard');
-            }
+            return redirect()->intended();
         } catch (\Throwable $th) {
             throw $th;
         }

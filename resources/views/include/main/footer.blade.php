@@ -1,6 +1,6 @@
 @php
     $contact = getContact();
-    $phone = substr($contact->phone, 0 , strpos($contact->phone, '/'));
+    $phone = strpos($contact->phone, '/') === false? $contact->phone : substr($contact->phone, 0 , strpos($contact->phone, '/'));
 @endphp
 
 <footer class="position-relative pt-lg-88 bg-gray50">
@@ -28,8 +28,8 @@
                 <div class="col-lg-4 col-md-6">
                     <h4 class="mb-32">Contact Information</h4>
                     <ul class="gap-24-vertical">
-                        <li><a href="#">Address : {{$contact->address?? '-'}}</a></li>
-                        <li><a href="#">Phone :  {{$contact->phone?? '-'}}</a></li>
+                        <li><a href="javascript:void(0)">Address : {{$contact->address?? '-'}}</a></li>
+                        <li><a href="tel:{{$phone}}">Phone :  {{$contact->phone?? '-'}}</a></li>
                         <li><a href="mailto:{{$contact->email?? ''}}">Email : {{$contact->email?? '-'}}</a></li>
                     </ul>
                 </div>

@@ -45,11 +45,7 @@ class GoogleSocialiteController extends Controller
       
             if ($finduser) {
                 Auth::login($finduser);
-                if (Auth::user()->role->role == 'super-admin') {
-                    return redirect('/admin/dashboard');
-                } else {
-                    return redirect('/booking-history');
-                }
+                return redirect()->intended();
             } else {
                 $role = $this->roleModel->findOneByRole('customer');
                 $initials = substr($user->user['given_name'], 0, 1).substr($user->user['family_name'], 0, 1);
@@ -67,11 +63,7 @@ class GoogleSocialiteController extends Controller
                 ]);
 
                 Auth::login($newUser);
-                if (Auth::user()->role->role != 'super-admin') {
-                    return redirect('/booking-history');
-                } else {
-                    return redirect('/admin/dashboard');
-                }
+                return redirect()->intended();
             }
         } catch (Exception $e) {
             dd($e->getMessage());

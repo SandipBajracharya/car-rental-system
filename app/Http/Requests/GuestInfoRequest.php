@@ -26,15 +26,16 @@ class GuestInfoRequest extends FormRequest
         return [
             'full_name' => 'required',
             'email' => 'required|email',
+            'mobile_number' => 'required|regex:/^[0-9-+]+$/|min:7',
             'country' => 'required',
             'state' => 'required',
             'city' => 'required',
             'street' => 'required',
-            'postal_code' => 'required',
-            'dob' => 'required|date|date_format:Y-m-d',
-            'document_image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
+            'postal_code' => 'required|regex:/^[0-9-]+$/',
+            'dob' => 'required|date|date_format:Y-m-d|before_or_equal:'.\Carbon\Carbon::now()->subYears(18)->format('Y-m-d'),
+            'document_image' => 'required|mimes:jpeg,png,jpg,gif,svg',
             'document_type' => 'required',
-            'document_number' => 'required|string',
+            'document_number' => 'required|string|regex:/^[A-Za-z0-9-]+$/',
             'document_country' => 'required|string',
             'document_expire' => 'required|date|after:yesterday',
             'notes' => 'nullable|string',
@@ -52,7 +53,8 @@ class GuestInfoRequest extends FormRequest
             'document_expire.after' => 'Document has already expired.',
             'dob.date_format' => 'Date of birth format incorrect.',
             'postal_code.required' => 'Postal code is required',
-            'dob.required' => 'Date of birth is required'
+            'dob.required' => 'Date of birth is required',
+            'dob.before_or_equal' => 'Age must not be less than 18.'
         ];
     }
 }

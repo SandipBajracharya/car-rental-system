@@ -3,6 +3,7 @@
 @section('main-content')
     @php
         $breadcrumb_arr = ['Home' => '/', 'Contact Us' => '#']; 
+        $phone = strpos($contact->phone, '/') === false? $contact->phone : substr($contact->phone, 0 , strpos($contact->phone, '/'));
     @endphp
     @include('include.main.innerHeader', ['breadcrumb_arr' => $breadcrumb_arr])
 
@@ -17,13 +18,13 @@
                     <div class="flex-center-center flex-column">
                         <div class="circle bg-primary mb-24"><i class="ic-location h3 text-white"></i></div>
                         <p class="mb-8">Address</p><a class="h6 text-center"
-                            href="#">{{$contact->address ?? '-'}}</a>
+                            href="javascript:void(0)">{{$contact->address ?? '-'}}</a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="flex-center-center flex-column">
                         <div class="circle bg-primary mb-24"><i class="ic-call h3 text-white"></i></div>
-                        <p class="mb-8">Phone Number</p><a class="h6 text-center" href="#">{{$contact->phone ?? '-'}}</a>
+                        <p class="mb-8">Phone Number</p><a class="h6 text-center" href="tel:{{$phone}}">{{$contact->phone ?? '-'}}</a>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">

@@ -279,6 +279,7 @@ class ReservationServices extends Model
         $payload = [
             'full_name' => $inputs->full_name,
             'email' => $inputs->email,
+            'mobile_number' => $inputs->mobile_number,
             'country' => $inputs->country,
             'state' => $inputs->state,
             'city' => $inputs->city,

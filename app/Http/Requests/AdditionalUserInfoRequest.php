@@ -27,7 +27,7 @@ class AdditionalUserInfoRequest extends FormRequest
         return [
             'document_image' => 'nullable|mimes:jpeg,png,jpg,gif,svg',
             'document_type' => 'required',
-            'document_number' => 'required|string',
+            'document_number' => 'required|string|regex:/^[A-Za-z0-9-]+$/' ,
             'dob' => 'nullable|date|date_format:Y-m-d',
             'name' => 'required',
             'gender' => 'required'

@@ -100,7 +100,7 @@
                         <small class="mb-12">Gender</small>
                         <div class="align-center gap-32 mb-32">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" id="male" name="gender" value="m" {{!empty($user->gender) && $user->gender == 'm'? 'checked' : ''}} />
+                                <input class="form-check-input" type="radio" id="male" name="gender" value="m" {{!empty($user->gender) && $user->gender == 'm'? 'checked' : ''}} @required(true)/>
                                 <label class="form-check-label" for="male">Male</label>
                             </div>
                             <div class="form-check">
@@ -113,13 +113,13 @@
                             </div>
                         </div>
                         <small>FullName </small>
-                        <input class="form-control form-control-lg mb-32" name="name" placeholder="" value="{{$user->first_name . ' '. $user->last_name}}" />
+                        <input class="form-control form-control-lg mb-32" name="name" placeholder="" value="{{ old('name') ?? $user->first_name . ' '. $user->last_name}}" required/>
                         <small>Date of Birth </small>
-                        <input class="form-control form-control-lg mb-48" name="dob" placeholder="" value="{{isset($user->profile->dob)? $user->profile->dob : ''}}" type="date"/>
+                        <input class="form-control form-control-lg mb-48" name="dob" placeholder="" value="{{ old('dob') ?? (isset($user->profile->dob)? $user->profile->dob : '')}}" type="date" required/>
                         
                         <h5 class="mb-32" id="link-2">Account Information</h5>
                         <small>Email Address </small>
-                        <input class="form-control form-control-lg mb-32" placeholder="" value="{{$user->email}}" disabled="disabled" />
+                        <input class="form-control form-control-lg mb-32" placeholder="" value="{{ old('email') ?? $user->email}}" disabled="disabled" required />
                         <div class="align-end gap-32 mb-48">
                             <div>
                                 <small>Password</small>
@@ -131,14 +131,14 @@
                         <div class="row align-center gap-24-row mb-32">
                             <div class="col-lg-4 col-md-5">
                                 <small>Document Type</small>
-                                <select class="form-control form-control-lg mb-32" name="document_type" id="document_type">
+                                <select class="form-control form-control-lg mb-32" name="document_type" id="document_type" required>
                                     <option value="" {{!isset($user)? 'selected' : ''}}>Select document type</option>
                                     {{-- <option value="Citizenship" {{isset($user) && isset($user->profile->document_type) && $user->profile->document_type == 'Citizenship'? 'selected' : ''}}>Citizenship</option> --}}
                                     <option value="Driving license" {{isset($user) && isset($user->profile->document_type) && $user->profile->document_type == 'Driving license'? 'selected' : ''}}>Driving license</option>
                                     {{-- <option value="Voters card" {{isset($user) && isset($user->profile->document_type) && $user->profile->document_type == 'Voters card'? 'selected' : ''}}>Voters card</option> --}}
                                 </select>
                                 <small>Document number</small>
-                                <input class="form-control form-control-lg mb-32" name="document_number" type="text" placeholder="Enter your document number" value="{{isset($user) && isset($user->profile->document_number)? $user->profile->document_number : ''}}">
+                                <input class="form-control form-control-lg mb-32" name="document_number" type="text" placeholder="Enter your document number" value="{{ old('document_number') ?? (isset($user) && isset($user->profile->document_number)? $user->profile->document_number : '')}}" required>
                                 <div class="mb-8">
                                     <small class="mb-12">Document Image</small>
                                     <input class="dropify" name="document_image" type="file" data-default-file="{{isset($user) && isset($user->profile->document_image)? '/images/userDocument/'.$user->profile->document_image : ''}}">
@@ -161,7 +161,7 @@
         });
     </script>
 
-    @if (count($errors) > 0)
+    @if (count($errors) > 0 && $errors->first('password'))
         <script>
             $("#pw-change").click();
         </script>
